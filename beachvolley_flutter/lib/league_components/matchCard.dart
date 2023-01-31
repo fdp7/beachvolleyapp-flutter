@@ -23,8 +23,8 @@ class MatchCard extends StatelessWidget {
                 margin: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.17), BlendMode.dstATop),
-                        image: const AssetImage("images/beachvolleyfield.jpg"), fit: BoxFit.cover)),
+                        colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.3), BlendMode.dstATop),
+                        image: const AssetImage("images/beachvolleyfield1.jpg"), fit: BoxFit.cover)),
                 child: Row(
                   children: [
                     SizedBox(
@@ -102,17 +102,20 @@ class MatchCard extends StatelessWidget {
     List<Text> rows = [];
     int length = 0;
     List<String> teamPlayers = [];
+
     if (team == "teamA") {
-      length = match.team_a.length;
       teamPlayers = match.team_a;
     }
     else if (team == "teamB") {
-      length = match.team_b.length;
       teamPlayers = match.team_b;
     }
-    for (var i=0; i<length; i++){
+
+    length = teamPlayers.length;
+
+    for (int i=0; i<length; i++){
       rows.add(Text(teamPlayers[i].toString(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, fontStyle: FontStyle.italic)));
     }
+
     return rows;
   }
 }

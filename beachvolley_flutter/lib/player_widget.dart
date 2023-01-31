@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:beachvolley_flutter/league_components/lastMatches.dart';
 import 'package:beachvolley_flutter/player_components/pieChart.dart';
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:beachvolley_flutter/models/Match.dart';
 
 class PlayerPage extends StatefulWidget {
   @override
@@ -22,6 +24,11 @@ class _PlayerPageState extends State<PlayerPage> {
   List<String> playerList = [];
   int matchCount = 100;
   int winCount = 50;
+
+  List<Match> matches = [];
+  List<String> teamA = [];
+  List<String> teamB = [];
+  String date = "";
 
   void _onRefresh() async{
     // monitor network fetch
@@ -60,6 +67,7 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   void loadPlayerData(String player) async {
+    loadMatches();
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
       final url = ApiEndpoints.baseUrl + ApiEndpoints.getPlayerEndpoint + player;
       var result = await http.get(
@@ -181,12 +189,74 @@ class _PlayerPageState extends State<PlayerPage> {
     );
   }
 
+  Widget lastMatches() => SliverToBoxAdapter(
+    child: LastMatches(matches),
+  );
+
+  void loadMatches() async{
+    Future.delayed(const Duration(milliseconds: 500)).then((_) async {
+      final url = "${ApiEndpoints.baseUrl}${ApiEndpoints.getMatchesEndpoint}?player=$currentUser";
+      var result = await http.get(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer ${jwtManager.jwt.toString()}'
+          }
+      );
+      var data = json.decode(result.body);
+      if (result.statusCode == 200) {
+        matches.clear();
+
+        for (var i = 0; i < data["matches"].length; i++) {
+          // make Date
+          //date = DateTime.parse(data["matches"][i]["date"]).toLocal().toString();
+          date = refactorDate(data["matches"][i]["date"]);
+          // make Teams
+          teamA = createTeam(data["matches"][i]["team_a"]);
+          teamB = createTeam(data["matches"][i]["team_b"]);
+          // make Matches
+          setState(() {
+            matches.add(
+                Match(
+                  date,
+                  teamA,
+                  teamB,
+                  data["matches"][i]["score_a"],
+                  data["matches"][i]["score_b"],
+                )
+            );
+            debugPrint("$date $teamA $teamB");
+          });
+        }
+      }
+    });
+  }
+
+  List<String> createTeam(dynamic matchData){
+
+    List<String> teamPlayers = [];
+
+    for (var j = 0; j < matchData.length; j++) {
+      teamPlayers.add(matchData[j]);
+    }
+
+    return teamPlayers;
+  }
+
+  String refactorDate(dynamic date){
+    String parsedDate = DateTime.parse(date).toLocal().toString();
+    String newDate = parsedDate.replaceRange(19, parsedDate.length, "");
+    return newDate;
+  }
+
   @override
   void initState() {
     jwtManager.init();
     loadPlayersList();
+    loadMatches();
     super.initState();
+
     var storage = const FlutterSecureStorage();
+
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
       await storage.read(key: "name").then((value) => {
         setState(() {
@@ -211,8 +281,8 @@ class _PlayerPageState extends State<PlayerPage> {
           const SliverToBoxAdapter(child: SizedBox(height: 50)),
           picker(),
           winPie(),
+          lastMatches(),
           //otherPlayers(),
-          //lastMatch(),
           const SliverToBoxAdapter(child: SizedBox(height: 100))
         ],
       ),
