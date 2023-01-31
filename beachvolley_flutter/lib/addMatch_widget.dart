@@ -6,12 +6,12 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:http/http.dart' as http;
 
-class AddGame extends StatefulWidget {
+class AddMatch extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _AddGameState();
+  State<StatefulWidget> createState() => _AddMatchState();
 }
 
-class _AddGameState extends State<AddGame> {
+class _AddMatchState extends State<AddMatch> {
 
   static var jwtManager = JwtManager();
 
@@ -33,7 +33,7 @@ class _AddGameState extends State<AddGame> {
 
   // get ranking and sort names in alphabetical order
   void loadPlayersList() async {
-    Future.delayed(Duration(milliseconds: 500)).then((_) async {
+    Future.delayed(const Duration(milliseconds: 500)).then((_) async {
       final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
       var result = await http.get(
           Uri.parse(url),
@@ -54,8 +54,6 @@ class _AddGameState extends State<AddGame> {
       }
     });
   }
-
-  String? _player1;
 
   @override
   Widget build(BuildContext context){
@@ -87,7 +85,7 @@ class _AddGameState extends State<AddGame> {
                         const SizedBox(height: 1,),
                         MultiSelectDialogField(
                           title: const Text("Team A players"),
-                          buttonIcon: const Icon(Icons.arrow_drop_down_circle_outlined),
+                          buttonIcon: const Icon(Icons.person_add),
                           buttonText: const Text("select"),
                           searchable: true,
                           items: playerList.map((e) => MultiSelectItem(e, e)).toList(),
@@ -122,7 +120,7 @@ class _AddGameState extends State<AddGame> {
                         const SizedBox(height: 1,),
                         MultiSelectDialogField(
                           title: const Text("Team B players"),
-                          buttonIcon: const Icon(Icons.arrow_drop_down_circle_outlined),
+                          buttonIcon: const Icon(Icons.person_add),
                           buttonText: const Text("select"),
                           searchable: true,
                           items: playerList.map((e) => MultiSelectItem(e, e)).toList(),
@@ -157,7 +155,7 @@ class _AddGameState extends State<AddGame> {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
-                  onPressed: isButtonDisabled ? null : () { saveGame(); },
+                  onPressed: isButtonDisabled ? null : () { saveMatch(); },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
@@ -174,34 +172,45 @@ class _AddGameState extends State<AddGame> {
     );
   }
 
-  bool validateTeams(List<String> teamA, List<String> teamB){
-    bool areValid = true;
-    teamA.forEach((a) {
-      teamB.forEach((b) {
-        if (a == b) {
-          areValid = false;
-        }
+  /// Summary: teams must be notEmpty and players can't be on both teams.
+  /// Returns: 0-->valid, 1-->empty, 2-->duplicate
+  int validateTeams(List<String> teamA, List<String> teamB){
+    int areValid = 0;
+    if (teamA.isEmpty || teamB.isEmpty) {
+      areValid = 1;
+    } else if (teamA.isNotEmpty && teamB.isNotEmpty) {
+      teamA.forEach((a) {
+        teamB.forEach((b) {
+          if (a == b) {
+            areValid = 2;
+          }
+        });
       });
-    });
+    }
     return areValid;
   }
 
-  Future<String?> saveGame() async {
+  /// Summary: draw match is not allowed
+  /// Returns bool
+  bool validateScores(scoreA, scoreB){
+    bool areValid = true;
+    if (scoreA == scoreB) {
+      areValid = false;
+    }
+    return areValid;
+  }
+
+  Future<String?> saveMatch() async {
     setState(() {
       isButtonDisabled = true;
     });
 
-    // if no player is in both teams, save game, else print error
-    bool areValid = validateTeams(teamA,teamB);
-    if (areValid) {
+    // if no player is in both teams, save match, else print error
+    int validTeams = validateTeams(teamA,teamB);
+    bool validScores = validateScores(_scoreA, _scoreB);
+    if (validTeams == 0 && validScores) {
       final url = ApiEndpoints.baseUrl + ApiEndpoints.addMatchEndpoint;
       final currentDate = getDate();
-
-      debugPrint(teamA.toString());
-      debugPrint(teamB.toString());
-      debugPrint(_scoreA.toString());
-      debugPrint(_scoreB.toString());
-      debugPrint(currentDate.toString());
 
       var result = await http.post(
         Uri.parse(url),
@@ -210,31 +219,46 @@ class _AddGameState extends State<AddGame> {
           "team_b": teamB,
           "score_a": _scoreA,
           "score_b": _scoreB,
-          "date": currentDate //"2024-12-13T00:21:30.000+00:00"
+          "date": currentDate
         }),
         headers: {
           'Authorization': 'Bearer ${jwtManager.jwt.toString()}'
         },
       );
       if (result.statusCode == 201) {
+        Navigator.pop(context);
         debugPrint(teamA.toString());
         debugPrint(teamB.toString());
         debugPrint(_scoreA.toString());
         debugPrint(_scoreB.toString());
         debugPrint(currentDate.toString());
-        return null;
+        return "Match successfully saved by the Good God Dippi";
       }
       else {
         setState(() {
           isButtonDisabled = false;
         });
-        return "An unexpected error occured!\n Please refer to Dippi";
+        debugPrint("An unexpected error occurred! Please report to the Good God Dippi");
+        return "An unexpected error occurred!\n Please report to the Good God Dippi";
       }
-    } else {
+    } else if (validTeams == 1) {
       setState(() {
         isButtonDisabled = false;
       });
-      return "A player can't be on both teams!\n Please check teams";
+      debugPrint("In the beginning the Good God Dippi was alone... but I guess you were not. Please check players");
+      return "In the beginning the Good God Dippi was alone...\n but I guess you were not\n Please check players";
+    } else if (validTeams == 2) {
+      setState(() {
+        isButtonDisabled = false;
+      });
+      debugPrint("A player can't be ubiquitous as the Good God Dippi! Please check players");
+      return "A player can't be ubiquitous as the Good God Dippi!\n Please check players";
+    } else if (!validScores) {
+      setState(() {
+        isButtonDisabled = false;
+      });
+      debugPrint("Only the Good God Dippi can establish a draw... YOU CANNOT. Please check scores");
+      return "Only the Good God Dippi can establish a draw...\nYOU CANNOT\n Please check scores";
     }
   }
 

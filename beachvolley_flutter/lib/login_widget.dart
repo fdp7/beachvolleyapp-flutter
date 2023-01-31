@@ -10,8 +10,8 @@ import 'package:http/http.dart' as http;
 class LoginScreen extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  Duration get loginTime => Duration(milliseconds: 1000);
-  final storage = FlutterSecureStorage();
+  Duration get loginTime => const Duration(milliseconds: 1000);
+  final storage = const FlutterSecureStorage();
 
   Future<String?> _login(LoginData data){
     return Future.delayed(loginTime).then((_) async {
@@ -53,7 +53,7 @@ class LoginScreen extends StatelessWidget {
             password: (data.password).toString()
         ));
       }
-      return "Sign Up failed\n Another user with same name may already exists";
+      return "Sign Up failed\n Another user with same name already exists.";
     });
   }
 

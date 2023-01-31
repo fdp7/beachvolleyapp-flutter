@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
 import 'package:beachvolley_flutter/home_widget.dart';
+import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
 import 'package:flutter/services.dart';
@@ -25,60 +26,46 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App>{
   var storage = const FlutterSecureStorage();
+  static var jwtManager = JwtManager();
 
-  /*Widget _body = SplashScreen(
-    seconds: 100,
-    title: new Text('', style: TextStyle(
-        //fontFamily: "sweetPurple",
-        fontSize: 80
-    )
-    ),
-    //image: new Image.asset('images/logo2.png'),
-    backgroundColor: Colors.tealAccent.shade400,
-    //loaderColor: Colors.white,
-    //photoSize: 200,
-  )*/
+  Widget _body = LoginScreen();
+  var result;
 
-  //String? jwt;
-  final Widget _body = LoginScreen();
-
-  //try get matches, if token is still valid go Home, else do Login
-  /*var result;
+  //try get ranking, if token is still valid go Home, else do Login
   void tryConnection() async {
     await storage.read(key: "jwt").then((value) async {
-      jwt = value;
-      Future.delayed(Duration(milliseconds: 2000), () {
-        final url = ApiEndpoints.baseUrl + ApiEndpoints.loginEndpoint;
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
         result = http.get(
             Uri.parse(url),
             headers: {
-              "Authorization": jwt.toString()
+              'Authorization': 'Bearer ${jwtManager.jwt.toString()}'
             }
         );
       });
       var response = json.decode(result.body);
       if(response.statusCode == 200) {
         debugPrint("token still valid, skip authentication");
-        Future.delayed(Duration(milliseconds: 2000), () {
+        Future.delayed(const Duration(milliseconds: 2000), () {
           setState(() {
             _body = Home();
           });
         });
       }
       else {
-        debugPrint(result.exception.toString());
-        Future.delayed(Duration(milliseconds: 2000), () {
+        Future.delayed(const Duration(milliseconds: 2000), () {
           setState(() {
             _body = LoginScreen();
           });
         });
       }
     });
-  }*/
+  }
 
   @override
   initState() {
     super.initState();
+    jwtManager.init();
     //tryConnection();
   }
 

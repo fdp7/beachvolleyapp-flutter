@@ -1,7 +1,8 @@
-import 'package:beachvolley_flutter/addGame_widget.dart';
+import 'package:beachvolley_flutter/addMatch_widget.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
+import 'package:beachvolley_flutter/player_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:beachvolley_flutter/ranking_widget.dart';
+import 'package:beachvolley_flutter/league_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,12 +36,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     super.initState();
     _children = [
       //LoginPage(),
-      Container(color: Colors.deepPurple.shade500),
-      Ranking(),
+      //Container(color: Colors.deepPurple.shade500),
+      League(),
+      PlayerPage()
     ];
     _pageController = PageController();
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
     curve = CurvedAnimation(
@@ -95,9 +97,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       floatingActionButton: ScaleTransition(
           scale: animation,
           child: FloatingActionButton(
-              onPressed: addGame,
-              child: Icon(Icons.add),
+            onPressed: addGame,
             backgroundColor: Colors.tealAccent.shade400,
+            child: const Icon(Icons.add),
           ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -110,11 +112,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         activeColor: Colors.tealAccent.shade400,
         activeIndex: _currentIndex,
         gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.softEdge,
+        notchSmoothness: NotchSmoothness.sharpEdge,
         notchAndCornersAnimation: animation,
-        leftCornerRadius: 16,
-        rightCornerRadius: 16,
+        leftCornerRadius: 20,
+        rightCornerRadius: 20,
         splashSpeedInMilliseconds: 400,
+        notchMargin: 8,
         onTap: onTapped
       ),
     );
@@ -124,9 +127,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _animationController.reset();
     showCupertinoModalPopup(
         context: context,
-        builder: (_) => Container(
+        builder: (_) => SizedBox(
           height: 750,
-          child: Scaffold(body:AddGame()),
+          child: Scaffold(body:AddMatch()),
         )
     );
     _animationController.forward();
