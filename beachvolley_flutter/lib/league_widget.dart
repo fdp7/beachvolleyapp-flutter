@@ -32,9 +32,9 @@ class _LeagueState extends State<League> {
   List<String> teamA = [];
   List<String> teamB = [];
   String date = "";
+  String currentUser = "";
 
-  final RefreshController _refreshController = RefreshController(
-      initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: true);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,8 @@ class _LeagueState extends State<League> {
       onLoading: _onLoading,
       enablePullDown: true,
       enablePullUp: false,
-      header: WaterDropMaterialHeader(
-          color: Colors.white, backgroundColor: Colors.tealAccent.shade400),
+      header: const WaterDropMaterialHeader(
+          color: Colors.white, backgroundColor: Color(0xffd81159)),
       child: CustomScrollView(
         slivers: <Widget>[
           ranking(),
@@ -74,7 +74,7 @@ class _LeagueState extends State<League> {
       );
 
   Widget lastMatches() => SliverToBoxAdapter(
-    child: LastMatches(matches),
+    child: LastMatches(currentUser, matches),
   );
 
   // get ranking
@@ -121,7 +121,6 @@ class _LeagueState extends State<League> {
 
         for (var i = 0; i < data["matches"].length; i++) {
           // make Date
-          //date = DateTime.parse(data["matches"][i]["date"]).toLocal().toString();
           date = refactorDate(data["matches"][i]["date"]);
           // make Teams
           teamA = createTeam(data["matches"][i]["team_a"]);
@@ -156,7 +155,7 @@ class _LeagueState extends State<League> {
   }
 
   String refactorDate(dynamic date){
-    String parsedDate = DateTime.parse(date).toLocal().toString();
+    String parsedDate = DateTime.parse(date).toIso8601String().replaceAll("T", " ").replaceAll("Z", "");
     String newDate = parsedDate.replaceRange(19, parsedDate.length, "");
     return newDate;
   }

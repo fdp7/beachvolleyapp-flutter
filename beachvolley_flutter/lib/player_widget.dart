@@ -18,7 +18,7 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
   var jwtManager = JwtManager();
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: true);
 
   String currentUser = 'Player';
   List<String> playerList = [];
@@ -95,14 +95,14 @@ class _PlayerPageState extends State<PlayerPage> {
     }
     return SliverToBoxAdapter(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 25),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
           ),
           child: ListTile(
               leading: const Icon(Icons.sports_handball_outlined, size: 50, color: Colors.black54,),
-              title: Text(currentUser),
+              title: Text(currentUser, style: TextStyle(fontSize: 20),),
               subtitle: const Text("click to change player"),
               trailing: const Icon(Icons.arrow_drop_down_circle_outlined),
               onLongPress: () => showDialog(
@@ -134,7 +134,7 @@ class _PlayerPageState extends State<PlayerPage> {
                 builder: (BuildContext context) {
                   // return alert dialog object
                   return AlertDialog(
-                      title: const Text('Select a player', style: TextStyle(color: Colors.pink),),
+                      title: const Text('Select a player', style: TextStyle(color: Color(0xffd81159))),
                       content: SizedBox(
                           height: 300.0, // Change as per your requirement
                           width: 300.0, // Change as per your requirement
@@ -190,7 +190,7 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   Widget lastMatches() => SliverToBoxAdapter(
-    child: LastMatches(matches),
+    child: LastMatches(currentUser, matches),
   );
 
   void loadMatches() async{
@@ -243,7 +243,7 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   String refactorDate(dynamic date){
-    String parsedDate = DateTime.parse(date).toLocal().toString();
+    String parsedDate = DateTime.parse(date).toIso8601String().replaceAll("T", " ").replaceAll("Z", "");
     String newDate = parsedDate.replaceRange(19, parsedDate.length, "");
     return newDate;
   }
@@ -275,7 +275,7 @@ class _PlayerPageState extends State<PlayerPage> {
       onLoading: _onLoading,
       enablePullDown: true,
       enablePullUp: false,
-      header: WaterDropMaterialHeader(color: Colors.white ,backgroundColor: Colors.tealAccent.shade400),
+      header: WaterDropMaterialHeader(color: Colors.white ,backgroundColor: Color(0xffd91159)),
       child: CustomScrollView(
         slivers: <Widget>[
           const SliverToBoxAdapter(child: SizedBox(height: 50)),

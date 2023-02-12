@@ -78,16 +78,21 @@ class _AddMatchState extends State<AddMatch> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.pregnant_woman_rounded, color: Colors.black87),
-                            Text("  Team A", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
+                            Icon(Icons.elderly_rounded, color: Colors.black87),
+                            Text("  Friends", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
                           ],
                         ),
                         const SizedBox(height: 1,),
                         MultiSelectDialogField(
-                          title: const Text("Team A players"),
+                          //title: const Text("Team A players"),
                           buttonIcon: const Icon(Icons.person_add),
-                          buttonText: const Text("select"),
+                          buttonText: const Text("select friends"),
                           searchable: true,
+                          selectedColor: const Color(0xffd81159),
+                          selectedItemsTextStyle: const TextStyle(
+                            color: Colors.white
+                          ),
+                          unselectedColor: const Color(0xffebebea),
                           items: playerList.map((e) => MultiSelectItem(e, e)).toList(),
                           listType: MultiSelectListType.CHIP,
                           onConfirm: (values) {
@@ -97,7 +102,7 @@ class _AddMatchState extends State<AddMatch> {
                         const SizedBox(height: 1,),
                         NumberPicker(
                           value: _scoreA,
-                          selectedTextStyle: TextStyle(color: Colors.tealAccent.shade700, fontSize: 50, fontWeight: FontWeight.w400),
+                          selectedTextStyle: const TextStyle(color: Color(0xffd81159), fontSize: 50, fontWeight: FontWeight.w400),
                           minValue: 0,
                           maxValue: 40,
                           itemHeight: 120,
@@ -113,16 +118,21 @@ class _AddMatchState extends State<AddMatch> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.precision_manufacturing_sharp, color: Colors.black87),
-                            Text("  Team B", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
+                            Icon(Icons.precision_manufacturing_rounded, color: Colors.black87),
+                            Text("  Foes", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
                           ],
                         ),
                         const SizedBox(height: 1,),
                         MultiSelectDialogField(
-                          title: const Text("Team B players"),
+                          //title: const Text("Team B players"),
                           buttonIcon: const Icon(Icons.person_add),
-                          buttonText: const Text("select"),
+                          buttonText: const Text("select foes"),
                           searchable: true,
+                          selectedColor: const Color(0xffd81159),
+                          selectedItemsTextStyle: const TextStyle(
+                              color: Colors.white
+                          ),
+                          unselectedColor: const Color(0xffebebea),
                           items: playerList.map((e) => MultiSelectItem(e, e)).toList(),
                           listType: MultiSelectListType.CHIP,
                           onConfirm: (values) {
@@ -132,7 +142,7 @@ class _AddMatchState extends State<AddMatch> {
                         const SizedBox(height: 1,),
                         NumberPicker(
                           value: _scoreB,
-                          selectedTextStyle: TextStyle(color: Colors.tealAccent.shade700, fontSize: 50, fontWeight: FontWeight.w400),
+                          selectedTextStyle: const TextStyle(color: Color(0xffd81159), fontSize: 50, fontWeight: FontWeight.w400),
                           minValue: 0,
                           maxValue: 40,
                           itemHeight: 120,
@@ -157,7 +167,7 @@ class _AddMatchState extends State<AddMatch> {
                 child: ElevatedButton(
                   onPressed: isButtonDisabled ? null : () { saveMatch(); },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: const Color(0xffd81159),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0)
                       )
@@ -201,11 +211,8 @@ class _AddMatchState extends State<AddMatch> {
   }
 
   Future<String?> saveMatch() async {
-    setState(() {
-      isButtonDisabled = true;
-    });
-
     // if no player is in both teams, save match, else print error
+    late String messageContent;
     int validTeams = validateTeams(teamA,teamB);
     bool validScores = validateScores(_scoreA, _scoreB);
     if (validTeams == 0 && validScores) {
@@ -232,34 +239,57 @@ class _AddMatchState extends State<AddMatch> {
         debugPrint(_scoreA.toString());
         debugPrint(_scoreB.toString());
         debugPrint(currentDate.toString());
-        return "Match successfully saved by the Good God Dippi";
+        messageContent = "Dippi said the match shall be saved";
+        setState(() {
+          isButtonDisabled = true;
+        });
       }
       else {
         setState(() {
           isButtonDisabled = false;
         });
         debugPrint("An unexpected error occurred! Please report to the Good God Dippi");
-        return "An unexpected error occurred!\n Please report to the Good God Dippi";
+        messageContent = "An unexpected error occurred!\n\nPlease report to Dippi";
       }
     } else if (validTeams == 1) {
       setState(() {
         isButtonDisabled = false;
       });
       debugPrint("In the beginning the Good God Dippi was alone... but I guess you were not. Please check players");
-      return "In the beginning the Good God Dippi was alone...\n but I guess you were not\n Please check players";
+      messageContent = "In the beginning Dippi was alone...\nbut I guess you were not\n\nPlease check the players";
     } else if (validTeams == 2) {
       setState(() {
         isButtonDisabled = false;
       });
       debugPrint("A player can't be ubiquitous as the Good God Dippi! Please check players");
-      return "A player can't be ubiquitous as the Good God Dippi!\n Please check players";
+      messageContent = "A player can't be ubiquitous as Dippi!\n\nPlease check duplicate players";
     } else if (!validScores) {
       setState(() {
         isButtonDisabled = false;
       });
       debugPrint("Only the Good God Dippi can establish a draw... YOU CANNOT. Please check scores");
-      return "Only the Good God Dippi can establish a draw...\nYOU CANNOT\n Please check scores";
+      messageContent = "Not even Dippi can establish a draw,\nof course you cannot!\n\nPlease check the scores";
     }
+
+    setState(() {
+      isButtonDisabled = false;
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Container(
+              child: Text(
+                messageContent,
+                style: TextStyle(
+                  fontSize: 15
+                ),
+              ),
+              padding: EdgeInsets.all(16),
+              alignment: Alignment.bottomCenter,
+              height: 110,
+            ),
+            backgroundColor: Color(0xffd81159),
+          )
+      );
+    });
   }
 
   String getDate(){

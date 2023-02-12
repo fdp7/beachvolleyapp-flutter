@@ -4,8 +4,9 @@ import 'package:flutter/cupertino.dart';
 
 class LastMatches extends StatelessWidget {
   final List<Match> matches;
+  final String currentUser;
 
-  const LastMatches(this.matches, {super.key});
+  const LastMatches(this.currentUser, this.matches, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class LastMatches extends StatelessWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: matches.length,
-            itemBuilder: (BuildContext context, int index) => MatchCard(matches[index]),
+            itemBuilder: (BuildContext context, int index) => MatchCard(currentUser, matches[index]),
           ),
         )
       ],

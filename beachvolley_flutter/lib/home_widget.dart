@@ -35,9 +35,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _children = [
-      //LoginPage(),
-      //Container(color: Colors.deepPurple.shade500),
-      League(),
+      const League(),
       PlayerPage()
     ];
     _pageController = PageController();
@@ -86,7 +84,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return Scaffold(
       key: _scaffoldKey,
       extendBody: true,
-      backgroundColor: Colors.blueGrey.shade50,
+      backgroundColor: const Color(0xFFEBEBEA),
       body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           allowImplicitScrolling: false,
@@ -98,7 +96,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           scale: animation,
           child: FloatingActionButton(
             onPressed: addGame,
-            backgroundColor: Colors.tealAccent.shade400,
+            backgroundColor: const Color(0xFFd81159),
             child: const Icon(Icons.add),
           ),
       ),
@@ -108,8 +106,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           Icons.home,
           Icons.people
         ],
-        splashColor: Colors.green.shade400,
-        activeColor: Colors.tealAccent.shade400,
+        splashColor: const Color(0xFFd81159),
+        activeColor: const Color(0xFFd81159),
         activeIndex: _currentIndex,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.sharpEdge,

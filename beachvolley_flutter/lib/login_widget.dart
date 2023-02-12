@@ -31,7 +31,7 @@ class LoginScreen extends StatelessWidget {
         await storage.write(key: "name", value: data.name);
         return null;
       }
-      return "Username and/or Password are wrong. Please retry.";
+      return "Username or Password are wrong. Please retry.";
     });
   }
 
@@ -61,17 +61,17 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
+        const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
             statusBarColor: Colors.transparent,
-            systemNavigationBarDividerColor: Colors.yellow.shade500,
-            systemNavigationBarColor: Colors.yellowAccent,
+            systemNavigationBarDividerColor: Color(0xff006ba6),
+            systemNavigationBarColor: Color(0xff006ba6),
             systemNavigationBarIconBrightness: Brightness.light
         )
     );
 
     return FlutterLogin(
-      title: 'BEACH',
+      title: 'Friends & Foes',
       theme: LoginTheme(
           titleStyle: const TextStyle(
               fontFamily: "CoreSans",
