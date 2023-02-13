@@ -10,6 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:beachvolley_flutter/models/Match.dart';
+import 'package:beachvolley_flutter/player_components/matchesColumnChart.dart';
 
 class PlayerPage extends StatefulWidget {
   @override
@@ -99,12 +100,13 @@ class _PlayerPageState extends State<PlayerPage> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
+            backgroundBlendMode: BlendMode.colorBurn
           ),
           child: ListTile(
-              leading: const Icon(Icons.sports_handball_outlined, size: 50, color: Colors.black54,),
-              title: Text(currentUser, style: TextStyle(fontSize: 20),),
-              subtitle: const Text("click to change player"),
-              trailing: const Icon(Icons.arrow_drop_down_circle_outlined),
+              leading: const Icon(Icons.sports_handball_outlined, size: 50, color: Color(0xffd81159)), //pink:0xffd81159, blue:0xffd81159
+              title: Text(currentUser, style: const TextStyle(fontSize: 20, color: Color(0xffd81159)),),
+              subtitle: const Text("click to change player", style: TextStyle(color: Color(0xffd81159))),
+              trailing: const Icon(Icons.arrow_drop_down_circle_outlined, color: Color(0xffd81159)),
               onLongPress: () => showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -171,7 +173,7 @@ class _PlayerPageState extends State<PlayerPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
@@ -188,6 +190,10 @@ class _PlayerPageState extends State<PlayerPage> {
         )
     );
   }
+
+  Widget matchesColumnChart() => SliverToBoxAdapter(
+    child: MatchesColumnChart(currentUser, matches)
+  );
 
   Widget lastMatches() => SliverToBoxAdapter(
     child: LastMatches(currentUser, matches),
@@ -275,12 +281,13 @@ class _PlayerPageState extends State<PlayerPage> {
       onLoading: _onLoading,
       enablePullDown: true,
       enablePullUp: false,
-      header: WaterDropMaterialHeader(color: Colors.white ,backgroundColor: Color(0xffd91159)),
+      header: const WaterDropMaterialHeader(color: Colors.white ,backgroundColor: Color(0xffd91159)),
       child: CustomScrollView(
         slivers: <Widget>[
           const SliverToBoxAdapter(child: SizedBox(height: 50)),
           picker(),
           winPie(),
+          matchesColumnChart(),
           lastMatches(),
           //otherPlayers(),
           const SliverToBoxAdapter(child: SizedBox(height: 100))

@@ -15,18 +15,18 @@ class LastMatches extends StatelessWidget {
         Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "Last Matches",
+                    "Last Matches\n",
                     style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.w400
+                      fontWeight: FontWeight.w400,
                     ),
                   )
                 ],

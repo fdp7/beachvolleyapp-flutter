@@ -156,14 +156,14 @@ class MatchCard extends StatelessWidget {
     );
   }
 
+  /// Summary: establish which team we're creating
+  /// and if the current player won the match
   List<Widget> _createTeam(String team) {
     List<Text> rows = [];
     int length = 0;
     List<String> teamPlayers = [];
     late bool currentUserWon;
 
-    /// Summary: establish which team we're creating
-    /// and if the current player won the match
     if (team == "teamA") {
       teamPlayers = match.team_a;
       if (teamPlayers.contains(currentUser)){

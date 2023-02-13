@@ -276,17 +276,17 @@ class _AddMatchState extends State<AddMatch> {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Container(
+              padding: const EdgeInsets.all(16),
+              alignment: Alignment.bottomCenter,
+              height: 110,
               child: Text(
                 messageContent,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15
                 ),
               ),
-              padding: EdgeInsets.all(16),
-              alignment: Alignment.bottomCenter,
-              height: 110,
             ),
-            backgroundColor: Color(0xffd81159),
+            backgroundColor: const Color(0xffd81159),
           )
       );
     });

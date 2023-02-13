@@ -64,8 +64,8 @@ class LoginScreen extends StatelessWidget {
         const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
             statusBarColor: Colors.transparent,
-            systemNavigationBarDividerColor: Color(0xff006ba6),
-            systemNavigationBarColor: Color(0xff006ba6),
+            systemNavigationBarDividerColor: Colors.white,
+            systemNavigationBarColor: Colors.white,
             systemNavigationBarIconBrightness: Brightness.light
         )
     );
@@ -73,10 +73,25 @@ class LoginScreen extends StatelessWidget {
     return FlutterLogin(
       title: 'Friends & Foes',
       theme: LoginTheme(
-          titleStyle: const TextStyle(
-              fontFamily: "CoreSans",
-              fontSize: 30
-          )
+        titleStyle: const TextStyle(
+          fontFamily: "CoreSans",
+          fontSize: 30,
+          color: Colors.white
+        ),
+        pageColorDark: const Color(0xff006ba6),
+        pageColorLight: const Color(0xffd81159),
+        primaryColor: const Color(0xffd81159),
+        accentColor: const Color(0xffd81159),
+        primaryColorAsInputLabel: true,
+        errorColor: const Color(0xffd81159),
+        cardTheme: CardTheme(
+          color: Colors.white,
+          elevation: 5,
+          margin: const EdgeInsets.only(top: 15),
+          shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(100.0)
+          ),
+        ),
       ),
       // logo: 'images/logo.jpg',
       onLogin: _login,
@@ -99,8 +114,8 @@ class LoginScreen extends StatelessWidget {
         recoverPasswordButton: 'Recover Password',
         goBackButton: 'BACK',
         confirmPasswordError: 'Confirm Password does not match Password',
-        recoverPasswordDescription: 'Password Recovery service is not available yet.',
-        recoverPasswordSuccess: 'Your request have been ignored, please contact the Good God Dippi',
+        recoverPasswordDescription: 'Password Recovery service is not available yet',
+        recoverPasswordSuccess: 'Your request have been ignored, please contact Dippi',
       ),
     );
   }
