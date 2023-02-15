@@ -10,8 +10,10 @@ import 'package:http/http.dart' as http;
 class LoginScreen extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  Duration get loginTime => Duration(milliseconds: 1000);
-  final storage = FlutterSecureStorage();
+
+  LoginScreen({super.key});
+  Duration get loginTime => const Duration(milliseconds: 1000);
+  final storage = const FlutterSecureStorage();
 
   Future<String?> _login(LoginData data){
     return Future.delayed(loginTime).then((_) async {
@@ -31,7 +33,7 @@ class LoginScreen extends StatelessWidget {
         await storage.write(key: "name", value: data.name);
         return null;
       }
-      return "Username and/or Password are wrong. Please retry.";
+      return "Username or Password are wrong. Please retry.";
     });
   }
 
@@ -53,7 +55,7 @@ class LoginScreen extends StatelessWidget {
             password: (data.password).toString()
         ));
       }
-      return "Sign Up failed\n Another user with same name may already exists";
+      return "Sign Up failed\n Another user with same name already exists.";
     });
   }
 
@@ -61,29 +63,44 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
+        const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
             statusBarColor: Colors.transparent,
-            systemNavigationBarDividerColor: Colors.yellow.shade500,
-            systemNavigationBarColor: Colors.yellowAccent,
+            systemNavigationBarDividerColor: Colors.white,
+            systemNavigationBarColor: Colors.white,
             systemNavigationBarIconBrightness: Brightness.light
         )
     );
 
     return FlutterLogin(
-      title: 'BEACH',
+      title: 'Friends & Foes',
       theme: LoginTheme(
-          titleStyle: const TextStyle(
-              fontFamily: "CoreSans",
-              fontSize: 30
-          )
+        titleStyle: const TextStyle(
+          fontFamily: "CoreSans",
+          fontSize: 30,
+          color: Colors.white
+        ),
+        pageColorDark: const Color(0xff006ba6),
+        pageColorLight: const Color(0xffd81159),
+        //primaryColor: const Color(0xffd81159),
+        accentColor: const Color(0xffd81159),
+        //primaryColorAsInputLabel: true,
+        errorColor: const Color(0xffd81159),
+        cardTheme: CardTheme(
+          color: Colors.white,
+          elevation: 5,
+          margin: const EdgeInsets.only(top: 15),
+          shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(100.0)
+          ),
+        ),
       ),
       // logo: 'images/logo.jpg',
       onLogin: _login,
       onSignup: _signup,
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => Home(),
+          builder: (context) => const Home(),
         ));
       },
       userValidator: (_) => null,
@@ -99,8 +116,8 @@ class LoginScreen extends StatelessWidget {
         recoverPasswordButton: 'Recover Password',
         goBackButton: 'BACK',
         confirmPasswordError: 'Confirm Password does not match Password',
-        recoverPasswordDescription: 'Password Recovery service is not available yet.',
-        recoverPasswordSuccess: 'Your request have been ignored, please contact the Good God Dippi',
+        recoverPasswordDescription: 'Password Recovery service is not available yet',
+        recoverPasswordSuccess: 'Your request have been ignored, please contact Dippi',
       ),
     );
   }

@@ -1,13 +1,15 @@
-import 'package:beachvolley_flutter/addGame_widget.dart';
-import 'package:beachvolley_flutter/login_widget.dart';
+import 'package:beachvolley_flutter/addMatch_widget.dart';
+import 'package:beachvolley_flutter/player_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:beachvolley_flutter/ranking_widget.dart';
+import 'package:beachvolley_flutter/league_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 
 
 class Home extends StatefulWidget {
+  const Home({super.key});
+
   @override
   State<Home> createState() => _HomeState();
 }
@@ -31,16 +33,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _pageController.animateToPage(_currentIndex, duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
+  @override
   void initState() {
     super.initState();
     _children = [
-      //LoginPage(),
-      Container(color: Colors.deepPurple.shade500),
-      Ranking(),
+      const League(),
+      PlayerPage(),
+      AddMatch()
     ];
     _pageController = PageController();
     _animationController = AnimationController(
-      duration: Duration(seconds: 1),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
     curve = CurvedAnimation(
@@ -84,7 +87,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return Scaffold(
       key: _scaffoldKey,
       extendBody: true,
-      backgroundColor: Colors.blueGrey.shade50,
+      backgroundColor: const Color(0xFFEBEBEA),
       body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           allowImplicitScrolling: false,
@@ -95,9 +98,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       floatingActionButton: ScaleTransition(
           scale: animation,
           child: FloatingActionButton(
-              onPressed: addGame,
-              child: Icon(Icons.add),
-            backgroundColor: Colors.tealAccent.shade400,
+            onPressed: addGame,
+            backgroundColor: const Color(0xFFd81159),
+            child: const Icon(Icons.add),
           ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -106,15 +109,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           Icons.home,
           Icons.people
         ],
-        splashColor: Colors.green.shade400,
-        activeColor: Colors.tealAccent.shade400,
+        splashColor: const Color(0xFFd81159),
+        activeColor: const Color(0xFFd81159),
         activeIndex: _currentIndex,
         gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.softEdge,
+        notchSmoothness: NotchSmoothness.sharpEdge,
         notchAndCornersAnimation: animation,
-        leftCornerRadius: 16,
-        rightCornerRadius: 16,
+        leftCornerRadius: 20,
+        rightCornerRadius: 20,
         splashSpeedInMilliseconds: 400,
+        notchMargin: 8,
         onTap: onTapped
       ),
     );
@@ -124,9 +128,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _animationController.reset();
     showCupertinoModalPopup(
         context: context,
-        builder: (_) => Container(
+        builder: (_) => SizedBox(
           height: 750,
-          child: Scaffold(body:AddGame()),
+          child: Scaffold(body:AddMatch()),
         )
     );
     _animationController.forward();
