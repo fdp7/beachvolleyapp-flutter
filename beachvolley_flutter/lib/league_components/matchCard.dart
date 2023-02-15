@@ -39,29 +39,29 @@ class MatchCard extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.date_range, size: 23, color: Color(0xff006ba6)),
+                              const Icon(Icons.date_range, size: 23, color: Colors.grey),
                               const Text("   "),
                               Text(
-                                match.date,
+                                refactorDateToDisplay(match.date),
                                 style: const TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w400,
-                                  color: Color(0xff006ba6)
+                                  color: Colors.grey
                                 ),
                               )
                             ],
                           )
                         ]
                       ),
-                      const SizedBox(width: 30), //make space between columns
+                      const SizedBox(width: 60), //make space between columns
                       Column(
                         // delete
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.delete,
+                              icon: const Icon(Icons.delete_outline,
                                   size: 23,
-                                  color: Color(0xffd81159)),
+                                  color: Colors.grey),
                               onPressed: () => showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -197,7 +197,7 @@ class MatchCard extends StatelessWidget {
       FontWeight fontWeight = FontWeight.w500;
       if (teamPlayers[i].toString() == currentUser){
         if (currentUserWon) {
-          c = const Color(0xff04d9ff);
+          c = const Color(0xff0496ff);
           fontSize = 20;
           fontWeight = FontWeight.w700;
         }
@@ -222,9 +222,10 @@ class MatchCard extends StatelessWidget {
     return rows;
   }
 
-  void deleteMatchByDate(BuildContext context, token, String date) async{
+  /// Summary: Only players of the match can delete a match
+  void deleteMatchByDate(BuildContext context, String token, String date) async{
 
-    String dbDate = refactorDate(date);
+    String dbDate = refactorDateToStorage(date);
 
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
       final url = "${ApiEndpoints.baseUrl}${ApiEndpoints.deleteMatchEndpoint}?date=$dbDate";
@@ -237,17 +238,24 @@ class MatchCard extends StatelessWidget {
       if (result.statusCode == 200) {
         debugPrint("deleted match in date $date");
         Navigator.pop(context, true);
-
         //MUST REFRESH LEAGUE AND PLAYER PAGE AFTER A DELETION
       }
     });
   }
 
-  String refactorDate(String date){
+  /// Summary: refactor date to adapt to query parameter search
+  String refactorDateToStorage(String date){
     String dbDate = "${DateTime.parse(match.date).toIso8601String()}+00:00".replaceAll(":", "%3A").replaceAll("+", "%2B");
     return dbDate;
   }
 
+  String refactorDateToDisplay(String date){
+    DateTime datetime = DateTime.parse(match.date);
+    String displayDate = "${datetime.day}/${datetime.month}/${datetime.year} ${datetime.hour}:${datetime.minute}";
+    return displayDate;
+  }
+
+  /// Summary: refactor date
   String initJwtManager(){
     jwtManager.init();
     return jwtManager.jwt.toString();

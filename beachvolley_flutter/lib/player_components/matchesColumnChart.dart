@@ -22,7 +22,7 @@ class MatchesColumnChart extends StatelessWidget {
       child: SfSparkWinLossChart(
         data:  _createWinLossDataset(currentUser, matches),
         color: Colors.white,
-        highPointColor: const Color(0xff04d9ff), // win
+        highPointColor: const Color(0xff0496ff), // win
         negativePointColor: const Color(0xffEFca08), // loss
         tiePointColor: Colors.white, // added just to have lateral space
       )

@@ -1,5 +1,4 @@
 import 'package:beachvolley_flutter/addMatch_widget.dart';
-import 'package:beachvolley_flutter/login_widget.dart';
 import 'package:beachvolley_flutter/player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/league_widget.dart';
@@ -9,6 +8,8 @@ import 'package:flutter/cupertino.dart';
 
 
 class Home extends StatefulWidget {
+  const Home({super.key});
+
   @override
   State<Home> createState() => _HomeState();
 }
@@ -32,11 +33,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _pageController.animateToPage(_currentIndex, duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
+  @override
   void initState() {
     super.initState();
     _children = [
       const League(),
-      PlayerPage()
+      PlayerPage(),
+      AddMatch()
     ];
     _pageController = PageController();
     _animationController = AnimationController(

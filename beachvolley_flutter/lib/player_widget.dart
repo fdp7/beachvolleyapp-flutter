@@ -103,8 +103,8 @@ class _PlayerPageState extends State<PlayerPage> {
             backgroundBlendMode: BlendMode.colorBurn
           ),
           child: ListTile(
-              leading: const Icon(Icons.sports_handball_outlined, size: 50, color: Color(0xffd81159)), //pink:0xffd81159, blue:0xffd81159
-              title: Text(currentUser, style: const TextStyle(fontSize: 20, color: Color(0xffd81159)),),
+              leading: const Icon(Icons.sports_handball_outlined, size: 50, color: Color(0xffd81159)), //pink:0xffd81159, blue:0xff0496ff
+              title: Text(currentUser, style: const TextStyle(fontSize: 20, color: Color(0xffd81159), fontWeight: FontWeight.w700)),
               subtitle: const Text("click to change player", style: TextStyle(color: Color(0xffd81159))),
               trailing: const Icon(Icons.arrow_drop_down_circle_outlined, color: Color(0xffd81159)),
               onLongPress: () => showDialog(

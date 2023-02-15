@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:http/http.dart' as http;
 
 class AddMatch extends StatefulWidget {
+  const AddMatch({super.key});
+
   @override
   State<StatefulWidget> createState() => _AddMatchState();
 }
@@ -14,14 +17,15 @@ class AddMatch extends StatefulWidget {
 class _AddMatchState extends State<AddMatch> {
 
   static var jwtManager = JwtManager();
+  var storage = const FlutterSecureStorage();
 
   bool isButtonDisabled = false;
 
-  List<String> playerList = [];
+  List<String> playerList = ["Players not loaded. Retry to add match"];
   List<String> teamA = [];
   List<String> teamB = [];
-  int _scoreA = 0;
-  int _scoreB = 0;
+  int scoreA = 0;
+  int scoreB = 0;
 
 
   @override
@@ -29,30 +33,6 @@ class _AddMatchState extends State<AddMatch> {
     jwtManager.init();
     loadPlayersList();
     super.initState();
-  }
-
-  // get ranking and sort names in alphabetical order
-  void loadPlayersList() async {
-    Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
-      var result = await http.get(
-          Uri.parse(url),
-          headers: {
-            'Authorization': 'Bearer ${jwtManager.jwt.toString()}'
-          }
-      );
-      var data = json.decode(result.body);
-      if (result.statusCode == 200) {
-        playerList.clear();
-        for (var i = 0; i < data["ranking"].length; i++) {
-          setState(() {
-            playerList.add(data["ranking"][i]["name"]);
-          });
-        }
-        playerList.sort();
-        debugPrint(playerList.toString());
-      }
-    });
   }
 
   @override
@@ -101,7 +81,7 @@ class _AddMatchState extends State<AddMatch> {
                         ),
                         const SizedBox(height: 1,),
                         NumberPicker(
-                          value: _scoreA,
+                          value: scoreA,
                           selectedTextStyle: const TextStyle(color: Color(0xffd81159), fontSize: 50, fontWeight: FontWeight.w400),
                           minValue: 0,
                           maxValue: 40,
@@ -109,7 +89,7 @@ class _AddMatchState extends State<AddMatch> {
                           itemWidth: 80,
                           onChanged: (num) {
                             setState(() {
-                              _scoreA = num;
+                              scoreA = num;
                             });
                           },
                           axis: Axis.horizontal,
@@ -141,7 +121,7 @@ class _AddMatchState extends State<AddMatch> {
                         ),
                         const SizedBox(height: 1,),
                         NumberPicker(
-                          value: _scoreB,
+                          value: scoreB,
                           selectedTextStyle: const TextStyle(color: Color(0xffd81159), fontSize: 50, fontWeight: FontWeight.w400),
                           minValue: 0,
                           maxValue: 40,
@@ -149,7 +129,7 @@ class _AddMatchState extends State<AddMatch> {
                           itemWidth: 80,
                           onChanged: (num) {
                             setState(() {
-                              _scoreB = num;
+                              scoreB = num;
                             });
                           },
                           axis: Axis.horizontal,
@@ -180,6 +160,30 @@ class _AddMatchState extends State<AddMatch> {
         )
       ),
     );
+  }
+
+  /// Summary: get ranking and sort names in alphabetical order
+  void loadPlayersList() async {
+    Future.delayed(const Duration(milliseconds: 500)).then((_) async {
+      final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
+      var result = await http.get(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer ${jwtManager.jwt.toString()}'
+          }
+      );
+      var data = json.decode(result.body);
+      if (result.statusCode == 200) {
+        playerList.clear();
+        for (var i = 0; i < data["ranking"].length; i++) {
+          setState(() {
+            playerList.add(data["ranking"][i]["name"]);
+          });
+        }
+        playerList.sort();
+        debugPrint(playerList.toString());
+      }
+    });
   }
 
   /// Summary: teams must be notEmpty and players can't be on both teams.
@@ -214,7 +218,7 @@ class _AddMatchState extends State<AddMatch> {
     // if no player is in both teams, save match, else print error
     late String messageContent;
     int validTeams = validateTeams(teamA,teamB);
-    bool validScores = validateScores(_scoreA, _scoreB);
+    bool validScores = validateScores(scoreA, scoreB);
     if (validTeams == 0 && validScores) {
       final url = ApiEndpoints.baseUrl + ApiEndpoints.addMatchEndpoint;
       final currentDate = getDate();
@@ -224,8 +228,8 @@ class _AddMatchState extends State<AddMatch> {
         body: jsonEncode({
           "team_a": teamA,
           "team_b": teamB,
-          "score_a": _scoreA,
-          "score_b": _scoreB,
+          "score_a": scoreA,
+          "score_b": scoreB,
           "date": currentDate
         }),
         headers: {
@@ -236,8 +240,8 @@ class _AddMatchState extends State<AddMatch> {
         Navigator.pop(context);
         debugPrint(teamA.toString());
         debugPrint(teamB.toString());
-        debugPrint(_scoreA.toString());
-        debugPrint(_scoreB.toString());
+        debugPrint(scoreA.toString());
+        debugPrint(scoreB.toString());
         debugPrint(currentDate.toString());
         messageContent = "Dippi said the match shall be saved";
         setState(() {
@@ -248,7 +252,7 @@ class _AddMatchState extends State<AddMatch> {
         setState(() {
           isButtonDisabled = false;
         });
-        debugPrint("An unexpected error occurred! Please report to the Good God Dippi");
+        debugPrint("An unexpected error occurred! Please report to Dippi");
         messageContent = "An unexpected error occurred!\n\nPlease report to Dippi";
       }
     } else if (validTeams == 1) {
@@ -290,6 +294,7 @@ class _AddMatchState extends State<AddMatch> {
           )
       );
     });
+    return null;
   }
 
   String getDate(){

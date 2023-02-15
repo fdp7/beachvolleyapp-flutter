@@ -10,6 +10,8 @@ import 'package:http/http.dart' as http;
 class LoginScreen extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  LoginScreen({super.key});
   Duration get loginTime => const Duration(milliseconds: 1000);
   final storage = const FlutterSecureStorage();
 
@@ -80,9 +82,9 @@ class LoginScreen extends StatelessWidget {
         ),
         pageColorDark: const Color(0xff006ba6),
         pageColorLight: const Color(0xffd81159),
-        primaryColor: const Color(0xffd81159),
+        //primaryColor: const Color(0xffd81159),
         accentColor: const Color(0xffd81159),
-        primaryColorAsInputLabel: true,
+        //primaryColorAsInputLabel: true,
         errorColor: const Color(0xffd81159),
         cardTheme: CardTheme(
           color: Colors.white,
@@ -98,7 +100,7 @@ class LoginScreen extends StatelessWidget {
       onSignup: _signup,
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => Home(),
+          builder: (context) => const Home(),
         ));
       },
       userValidator: (_) => null,
