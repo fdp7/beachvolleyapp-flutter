@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
       var result = await http.post(
           Uri.parse(url),
           body: jsonEncode({
-            "name": data.name.trim(),
+            "name": data.name,
             "password": data.password
           })
       );
@@ -80,7 +80,7 @@ class LoginScreen extends StatelessWidget {
           fontSize: 30,
           color: Colors.white
         ),
-        pageColorDark: const Color(0xff006ba6),
+        //pageColorDark: const Color(0xff006ba6),
         pageColorLight: const Color(0xffd81159),
         //primaryColor: const Color(0xffd81159),
         accentColor: const Color(0xffd81159),

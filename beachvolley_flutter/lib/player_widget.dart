@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:beachvolley_flutter/models/Match.dart';
 import 'package:beachvolley_flutter/player_components/matchesColumnChart.dart';
+import 'package:beachvolley_flutter/player_components/eloChart.dart';
 
 class PlayerPage extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class _PlayerPageState extends State<PlayerPage> {
   List<String> playerList = [];
   int matchCount = 100;
   int winCount = 50;
+  List<double> elo = [100.0,100.0];
 
   List<Match> matches = [];
   List<String> teamA = [];
@@ -56,9 +58,7 @@ class _PlayerPageState extends State<PlayerPage> {
         playerList.clear();
         for (var i = 0; i < data["ranking"].length; i++) {
           setState(() {
-            playerList.add(
-                    data["ranking"][i]["name"]
-            );
+            playerList.add(data["ranking"][i]["name"]);
           });
         }
         playerList.sort();
@@ -81,10 +81,13 @@ class _PlayerPageState extends State<PlayerPage> {
       if (result.statusCode == 200) {
         matchCount = data["player"]["match_count"];
         winCount = data["player"]["win_count"];
-        debugPrint("$matchCount $winCount");
+        elo.clear();
+        elo = createElo(data["player"]["elo"]);
+        debugPrint("$matchCount $winCount $elo");
         //set new data to widget
         setState(() {
           winPie();
+          eloTrend();
         });
       }
     });
@@ -191,6 +194,10 @@ class _PlayerPageState extends State<PlayerPage> {
     );
   }
 
+  Widget eloTrend() => SliverToBoxAdapter(
+    child: EloChart(elo)
+  );
+
   Widget matchesColumnChart() => SliverToBoxAdapter(
     child: MatchesColumnChart(currentUser, matches)
   );
@@ -238,14 +245,20 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   List<String> createTeam(dynamic matchData){
-
     List<String> teamPlayers = [];
-
     for (var j = 0; j < matchData.length; j++) {
       teamPlayers.add(matchData[j]);
     }
-
     return teamPlayers;
+  }
+
+  List<double> createElo(List<dynamic> eloData){
+    List<double> eloResult = [];
+    for (var j = 0; j < eloData.length; j++){
+      double elo_i = num.parse(eloData[j].toStringAsFixed(1)).toDouble(); //1 decimal
+      eloResult.add(elo_i);
+    }
+    return eloResult;
   }
 
   String refactorDate(dynamic date){
@@ -287,7 +300,8 @@ class _PlayerPageState extends State<PlayerPage> {
           const SliverToBoxAdapter(child: SizedBox(height: 50)),
           picker(),
           winPie(),
-          matchesColumnChart(),
+          //matchesColumnChart(),
+          eloTrend(),
           lastMatches(),
           //otherPlayers(),
           const SliverToBoxAdapter(child: SizedBox(height: 100))

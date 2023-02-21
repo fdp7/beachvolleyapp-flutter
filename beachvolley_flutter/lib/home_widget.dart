@@ -39,7 +39,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _children = [
       const League(),
       PlayerPage(),
-      AddMatch()
+      const AddMatch()
     ];
     _pageController = PageController();
     _animationController = AnimationController(
@@ -128,7 +128,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _animationController.reset();
     showCupertinoModalPopup(
         context: context,
-        builder: (_) => SizedBox(
+        builder: (_) => const SizedBox(
           height: 750,
           child: Scaffold(body:AddMatch()),
         )

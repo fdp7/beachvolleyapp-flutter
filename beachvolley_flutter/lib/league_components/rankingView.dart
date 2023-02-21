@@ -7,7 +7,7 @@ class RankingView extends StatelessWidget {
   Widget? _data;
 
   RankingView(List<Player> playerList, bool rankingModePercentage, int? sortRankingColumnIndex, bool isRankingAscendingOrder, Function onTapCallback, {super.key}){
-    final columns = ['Rank', 'Name', 'Matches', 'Win'];
+    final columns = ['R', 'Name', 'P', 'W', 'ELO'];
 
     List<DataCell> getCells(List<dynamic> cells) =>
         cells.map((data) =>
@@ -70,7 +70,8 @@ class RankingView extends StatelessWidget {
             player.rank,
             player.name,
             player.match_count,
-            player.win_count
+            player.win_count,
+            player.last_elo
           ];
           return DataRow(
             cells: getCells(cells),
@@ -83,7 +84,69 @@ class RankingView extends StatelessWidget {
           );
         }).toList();
 
-    _data = Container(
+    _data =
+        Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(
+                    left: 30,
+                    top: 50
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                    SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Ranking\n",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              child: Container(
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  bottom: 40
+                ),
+                child: DataTable(
+                  dataRowHeight: 50,
+                  columns: getColumns(columns),
+                  rows: getRows(playerList),
+                  sortColumnIndex: sortRankingColumnIndex,
+                  sortAscending: isRankingAscendingOrder,
+                  columnSpacing: 15,
+                  headingRowColor: MaterialStateColor.resolveWith((states) => Colors.grey.shade50),
+                  headingTextStyle: const TextStyle(
+                      color: Color(0xffd81159),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500
+                  ),
+                  dataTextStyle: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 15
+                  ),
+                  border: TableBorder(
+                      borderRadius: BorderRadius.circular(5)
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+
+    /*_data =
+        Container(
           alignment: Alignment.topCenter,
           padding: const EdgeInsets.symmetric(
               vertical: 50,
@@ -110,7 +173,7 @@ class RankingView extends StatelessWidget {
               borderRadius: BorderRadius.circular(5)
             ),
           ),
-        );
+        );*/
   }
 
   @override
