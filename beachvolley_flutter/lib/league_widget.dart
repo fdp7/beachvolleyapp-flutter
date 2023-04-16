@@ -33,6 +33,7 @@ class _LeagueState extends State<League> {
   List<String> teamB = [];
   String date = "";
   String currentUser = "";
+  List<double> elo = [100.0];
 
   final RefreshController _refreshController = RefreshController(initialRefresh: true);
 
@@ -90,14 +91,18 @@ class _LeagueState extends State<League> {
       var data = json.decode(result.body);
       if (result.statusCode == 200) {
         playerList.clear();
+        elo.clear();
         for (var i = 0; i < data["ranking"].length; i++) {
+          elo = createElo(data["ranking"][i]["elo"]);
           setState(() {
             playerList.add(
                 Player(
-                    data["ranking"][i]["name"],
-                    data["ranking"][i]["match_count"],
-                    data["ranking"][i]["win_count"],
-                    i + 1 // rank
+                  data["ranking"][i]["name"],
+                  data["ranking"][i]["match_count"],
+                  data["ranking"][i]["win_count"],
+                  elo,
+                  num.parse(data["ranking"][i]["last_elo"].toStringAsFixed(1)).toDouble(), //1 decimal
+                  i + 1, // rank
                 )
             );
           });
@@ -144,14 +149,20 @@ class _LeagueState extends State<League> {
   }
 
   List<String> createTeam(dynamic matchData){
-
     List<String> teamPlayers = [];
-
     for (var j = 0; j < matchData.length; j++) {
       teamPlayers.add(matchData[j]);
     }
-
     return teamPlayers;
+  }
+
+  List<double> createElo(List<dynamic> eloData){
+    List<double> eloResult = [];
+    for (var j = 0; j < eloData.length; j++){
+      double elo_i = num.parse(eloData[j].toStringAsFixed(1)).toDouble(); //1 decimal
+      eloResult.add(elo_i);
+    }
+    return eloResult;
   }
 
   String refactorDate(dynamic date){

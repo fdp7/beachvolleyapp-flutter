@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/models/Match.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class MatchesColumnChart extends StatelessWidget {

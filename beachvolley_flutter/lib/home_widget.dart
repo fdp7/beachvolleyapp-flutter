@@ -1,10 +1,12 @@
 import 'package:beachvolley_flutter/addMatch_widget.dart';
 import 'package:beachvolley_flutter/player_widget.dart';
+import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/league_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 class Home extends StatefulWidget {
@@ -15,6 +17,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
+
+  static var jwtManager = JwtManager();
+  var storage = const FlutterSecureStorage();
+
   late PageController _pageController;
   late AnimationController _animationController;
   late Animation<double> animation;
@@ -35,11 +41,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    jwtManager.init();
     super.initState();
     _children = [
       const League(),
       PlayerPage(),
-      AddMatch()
+      const AddMatch(),
     ];
     _pageController = PageController();
     _animationController = AnimationController(
@@ -128,7 +135,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _animationController.reset();
     showCupertinoModalPopup(
         context: context,
-        builder: (_) => SizedBox(
+        builder: (_) => const SizedBox(
           height: 750,
           child: Scaffold(body:AddMatch()),
         )

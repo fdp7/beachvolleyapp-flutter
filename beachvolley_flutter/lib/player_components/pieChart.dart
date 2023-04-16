@@ -22,7 +22,7 @@ class MyPieChart extends StatelessWidget {
           "Win": _wins.toDouble(),
           "Loss": _total.toDouble() - _wins.toDouble()
         },
-        animationDuration: const Duration(milliseconds: 500),
+        animationDuration: const Duration(seconds: 1),
         chartLegendSpacing: 50,
         chartRadius: MediaQuery.of(context).size.width / 3.2,
         colorList: const [Color(0xff0496ff), Color(0xffEFca08)],

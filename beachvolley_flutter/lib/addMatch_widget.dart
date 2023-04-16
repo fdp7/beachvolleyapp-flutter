@@ -8,6 +8,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:http/http.dart' as http;
 
 class AddMatch extends StatefulWidget {
+
   const AddMatch({super.key});
 
   @override
@@ -21,7 +22,7 @@ class _AddMatchState extends State<AddMatch> {
 
   bool isButtonDisabled = false;
 
-  List<String> playerList = ["Players not loaded. Retry to add match"];
+  List<String> playerList = ["Please close popup and retry."];
   List<String> teamA = [];
   List<String> teamB = [];
   int scoreA = 0;
@@ -30,8 +31,8 @@ class _AddMatchState extends State<AddMatch> {
 
   @override
   void initState(){
-    jwtManager.init();
     loadPlayersList();
+    jwtManager.init();
     super.initState();
   }
 
@@ -164,7 +165,7 @@ class _AddMatchState extends State<AddMatch> {
 
   /// Summary: get ranking and sort names in alphabetical order
   void loadPlayersList() async {
-    Future.delayed(const Duration(milliseconds: 500)).then((_) async {
+    Future.delayed(const Duration(milliseconds: 1000)).then((_) async {
       final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
       var result = await http.get(
           Uri.parse(url),
@@ -236,6 +237,7 @@ class _AddMatchState extends State<AddMatch> {
           'Authorization': 'Bearer ${jwtManager.jwt.toString()}'
         },
       );
+      // if created
       if (result.statusCode == 201) {
         Navigator.pop(context);
         debugPrint(teamA.toString());

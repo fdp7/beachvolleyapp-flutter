@@ -48,7 +48,7 @@ class _AppState extends State<App>{
         debugPrint("token still valid, skip authentication");
         Future.delayed(const Duration(milliseconds: 2000), () {
           setState(() {
-            _body = Home();
+            _body = const Home();
           });
         });
       }
@@ -72,11 +72,11 @@ class _AppState extends State<App>{
   Widget build(BuildContext context) {
 
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
+        const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
             statusBarColor: Colors.transparent,
-            systemNavigationBarDividerColor: Colors.tealAccent.shade400,
-            systemNavigationBarColor: Colors.tealAccent.shade400,
+            systemNavigationBarDividerColor: Color(0xffd81159),
+            systemNavigationBarColor: Color(0xffd81159),
             systemNavigationBarIconBrightness: Brightness.light
         )
     );
@@ -87,13 +87,9 @@ class _AppState extends State<App>{
     ]);
 
     return MaterialApp(
-      title: 'Beach Volley App',
       home: Scaffold (
-        appBar: AppBar(
-          title: const Text('Beach Volley App'),
-        ),
         body: _body,
-        )
+      ),
     );
   }
 }
