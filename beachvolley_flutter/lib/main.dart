@@ -89,7 +89,7 @@ class _AppState extends State<App>{
     return MaterialApp(
       home: Scaffold (
         body: _body,
-        )
+      ),
     );
   }
 }

@@ -7,7 +7,7 @@ class RankingView extends StatelessWidget {
   Widget? _data;
 
   RankingView(List<Player> playerList, bool rankingModePercentage, int? sortRankingColumnIndex, bool isRankingAscendingOrder, Function onTapCallback, {super.key}){
-    final columns = ['R', 'Name', 'P', 'W', 'ELO'];
+    final columns = ['', 'Name', 'P', 'W', 'ELO'];
 
     List<DataCell> getCells(List<dynamic> cells) =>
         cells.map((data) =>
@@ -75,12 +75,12 @@ class RankingView extends StatelessWidget {
           ];
           return DataRow(
             cells: getCells(cells),
-            color: MaterialStateProperty.resolveWith((_) {
+            /*color: MaterialStateProperty.resolveWith((_) {
               if (player.rank.isOdd) {
                 return Colors.white;
               }
               return Colors.grey.shade50;
-            })
+            })*/
           );
         }).toList();
 
@@ -94,6 +94,7 @@ class RankingView extends StatelessWidget {
                     left: 30,
                     top: 50
                   ),
+                  color: Colors.transparent,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: const [
@@ -121,59 +122,32 @@ class RankingView extends StatelessWidget {
                 ),
                 child: DataTable(
                   dataRowHeight: 50,
+                  showBottomBorder: false,
                   columns: getColumns(columns),
                   rows: getRows(playerList),
                   sortColumnIndex: sortRankingColumnIndex,
                   sortAscending: isRankingAscendingOrder,
                   columnSpacing: 15,
-                  headingRowColor: MaterialStateColor.resolveWith((states) => Colors.grey.shade50),
+                  headingRowColor: MaterialStateColor.resolveWith((_) =>
+                    Colors.white //Color(0xffebebea)
+                  ),
+                  dataRowColor: MaterialStateProperty.resolveWith((states) {
+                    return Colors.white;
+                  }),
                   headingTextStyle: const TextStyle(
-                      color: Color(0xffd81159),
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500
+                    color: Color(0xffd81159),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500
                   ),
                   dataTextStyle: const TextStyle(
-                      color: Colors.black87,
-                      fontSize: 15
+                    color: Colors.black87,
+                    fontSize: 15
                   ),
-                  border: TableBorder(
-                      borderRadius: BorderRadius.circular(5)
-                  ),
-                ),
+                )
               ),
-            )
+            ),
           ],
         );
-
-    /*_data =
-        Container(
-          alignment: Alignment.topCenter,
-          padding: const EdgeInsets.symmetric(
-              vertical: 50,
-              horizontal: 10
-          ),
-          child: DataTable(
-            dataRowHeight: 50,
-            columns: getColumns(columns),
-            rows: getRows(playerList),
-            sortColumnIndex: sortRankingColumnIndex,
-            sortAscending: isRankingAscendingOrder,
-            columnSpacing: 15,
-            headingRowColor: MaterialStateColor.resolveWith((states) => Colors.grey.shade50),
-            headingTextStyle: const TextStyle(
-              color: Color(0xffd81159),
-              fontSize: 15,
-              fontWeight: FontWeight.w500
-            ),
-            dataTextStyle: const TextStyle(
-              color: Colors.black87,
-              fontSize: 15
-            ),
-            border: TableBorder(
-              borderRadius: BorderRadius.circular(5)
-            ),
-          ),
-        );*/
   }
 
   @override

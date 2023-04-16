@@ -10,7 +10,7 @@ class EloChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(25),
-      padding: const EdgeInsets.symmetric(vertical: 40),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -19,11 +19,12 @@ class EloChart extends StatelessWidget {
         title: ChartTitle(
           text: "ELO",
           textStyle: const TextStyle(
-            color: Color(0xffebebea),
-            fontWeight: FontWeight.w900,
-            fontSize: 20
-        )
+            color: Colors.black87, //Color(0xffd4d4d3),
+            fontWeight: FontWeight.w700,
+            fontSize: 18
+          )
         ),
+        margin: const EdgeInsets.all(20),
         plotAreaBorderWidth: 0,
         series: <ChartSeries>[
           LineSeries<EloData, double>(
@@ -35,7 +36,7 @@ class EloChart extends StatelessWidget {
             dataLabelSettings: const DataLabelSettings(
               isVisible: true
             ),
-            color: Color(0xff0496ff),
+            color: const Color(0xff0496ff),
             animationDelay: 5
           ),
         ],

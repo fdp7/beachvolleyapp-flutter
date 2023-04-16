@@ -24,36 +24,18 @@ class MatchCard extends StatelessWidget {
         elevation: 3,
         borderOnForeground: true,
         color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Container(
-          color: Colors.white,
+          color: Colors.transparent,
           child: Column(
             children: [
-              const SizedBox(height: 10),
               SizedBox(
-                  width: 270,
+                  width: 300,
                   child: Row(
                     children: [
-                      Column(
-                        // date
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.date_range, size: 23, color: Colors.grey),
-                              const Text("   "),
-                              Text(
-                                refactorDateToDisplay(match.date),
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey
-                                ),
-                              )
-                            ],
-                          )
-                        ]
-                      ),
-                      const SizedBox(width: 60), //make space between columns
+                      const SizedBox(width: 230), //make space between columns
                       Column(
                         // delete
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +43,7 @@ class MatchCard extends StatelessWidget {
                             IconButton(
                               icon: const Icon(Icons.delete_outline,
                                   size: 23,
-                                  color: Colors.grey),
+                                  color: Color(0xffd4d4d3)),
                               onPressed: () => showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -73,8 +55,8 @@ class MatchCard extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
                                         child: ElevatedButton(
                                           onPressed: () {
-                                            String token = initJwtManager();
-                                            deleteMatchByDate(context, token, match.date);
+                                            var credentials = initJwtManager();
+                                            deleteMatchByDate(context, credentials, match);
                                           },
                                           child: Text(
                                             'yes'.toUpperCase(),
@@ -91,65 +73,85 @@ class MatchCard extends StatelessWidget {
                     ]
                   )
               ),
-              Container(
-                margin: const EdgeInsets.all(5),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 110,
+                    height: 100,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: _createTeam("teamA")
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 60,
+                    height: 160,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("${match.score_a}-${match.score_b}", style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w700,),)
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 110,
+                    height: 160,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: _createTeam("teamB")
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: 110,
-                      height: 160,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                    Column(
+                      // date
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Column(
-                                children: _createTeam("teamA")
+                              const Icon(Icons.date_range, size: 23, color: Color(0xffd4d4d3)),
+                              const Text("   "),
+                              Text(
+                                refactorDateToDisplay(match.date),
+                                style: const TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xffd4d4d3)
+                                ),
                               )
                             ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 60,
-                      height: 160,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("${match.score_a}-${match.score_b}", style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w700,),)
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 110,
-                      height: 160,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: _createTeam("teamB")
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                          )
+                        ]
                     ),
                   ],
                 ),
-
-              ),
-              const SizedBox(height: 10),
-
+              )
             ],
           ),
         )
@@ -187,8 +189,6 @@ class MatchCard extends StatelessWidget {
       }
     }
 
-    //check who won
-
     length = teamPlayers.length;
     for (int i=0; i<length; i++){
       //make different color and font for current player for win and loss
@@ -223,24 +223,45 @@ class MatchCard extends StatelessWidget {
   }
 
   /// Summary: Only players of the match can delete a match
-  void deleteMatchByDate(BuildContext context, String token, String date) async{
+  void deleteMatchByDate(BuildContext context, var credentials, Match match) async{
 
-    String dbDate = refactorDateToStorage(date);
+    String dbDate = refactorDateToStorage(match.date);
+    String loggedUser = credentials[0];
+    String jwt = credentials[1];
 
-    Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = "${ApiEndpoints.baseUrl}${ApiEndpoints.deleteMatchEndpoint}?date=$dbDate";
-      var result = await http.delete(
-          Uri.parse(url),
-          headers: {
-            'Authorization': 'Bearer $token'
-          }
-      );
-      if (result.statusCode == 200) {
-        debugPrint("deleted match in date $date");
-        Navigator.pop(context, true);
-        //MUST REFRESH LEAGUE AND PLAYER PAGE AFTER A DELETION
-      }
+    // check if loggedUser played the match
+    List<String> players = [];
+    match.team_a.forEach((player) {
+      players.add(player);
     });
+    match.team_b.forEach((player) {
+      players.add(player);
+    });
+
+    if (!players.contains(loggedUser)){
+      Navigator.pop(context, true);
+      return;
+      /*return const SnackBar(
+        content: Text("You can't delete a match you didn't play")
+      );*/
+    }
+
+    final url = "${ApiEndpoints.baseUrl}${ApiEndpoints.deleteMatchEndpoint}?date=$dbDate";
+    var result = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $jwt'
+        }
+    );
+    if (result.statusCode == 200) {
+      debugPrint("deleted match in date ${match.date}");
+      Navigator.pop(context, true);
+      //MUST REFRESH LEAGUE AND PLAYER PAGE AFTER A DELETION
+    }
+
+    /*return const SnackBar(
+        content: Text("Dippi vanished the match as you wished")
+    );*/
   }
 
   /// Summary: refactor date to adapt to query parameter search
@@ -249,16 +270,19 @@ class MatchCard extends StatelessWidget {
     return dbDate;
   }
 
+  /// Summary: refactor date
   String refactorDateToDisplay(String date){
     DateTime datetime = DateTime.parse(match.date);
-    String displayDate = "${datetime.day}/${datetime.month}/${datetime.year} ${datetime.hour}:${datetime.minute}";
+    String displayDate = "${datetime.day.toString()}/${datetime.month.toString()}/${datetime.year.toString()} ${datetime.hour.toString()}:${datetime.minute.toString()}";
     return displayDate;
   }
 
-  /// Summary: refactor date
-  String initJwtManager(){
+  List<String?> initJwtManager(){
     jwtManager.init();
-    return jwtManager.jwt.toString();
+    var jwt = jwtManager.jwt.toString();
+    var loggedUser = jwtManager.name;
+    var credentials = [loggedUser,jwt];
+    return credentials;
   }
 
 }
