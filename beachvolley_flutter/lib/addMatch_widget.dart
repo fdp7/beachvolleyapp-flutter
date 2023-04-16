@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:http/http.dart' as http;
+import 'package:beachvolley_flutter/utils/globals.dart' as globals;
 
 class AddMatch extends StatefulWidget {
 
@@ -166,7 +167,7 @@ class _AddMatchState extends State<AddMatch> {
   /// Summary: get ranking and sort names in alphabetical order
   void loadPlayersList() async {
     Future.delayed(const Duration(milliseconds: 1000)).then((_) async {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getRankingEndpoint;
       var result = await http.get(
           Uri.parse(url),
           headers: {
@@ -221,7 +222,7 @@ class _AddMatchState extends State<AddMatch> {
     int validTeams = validateTeams(teamA,teamB);
     bool validScores = validateScores(scoreA, scoreB);
     if (validTeams == 0 && validScores) {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.addMatchEndpoint;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.addMatchEndpoint;
       final currentDate = getDate();
 
       var result = await http.post(

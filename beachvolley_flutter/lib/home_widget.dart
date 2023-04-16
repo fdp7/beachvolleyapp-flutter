@@ -1,5 +1,6 @@
 import 'package:beachvolley_flutter/addMatch_widget.dart';
 import 'package:beachvolley_flutter/player_widget.dart';
+import 'package:beachvolley_flutter/sideBar_widget.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/league_widget.dart';
@@ -44,6 +45,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     jwtManager.init();
     super.initState();
     _children = [
+      const SideBar(),
       const League(),
       PlayerPage(),
       const AddMatch(),

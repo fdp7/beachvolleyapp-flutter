@@ -12,6 +12,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:beachvolley_flutter/models/Match.dart';
 import 'package:beachvolley_flutter/player_components/matchesColumnChart.dart';
 import 'package:beachvolley_flutter/player_components/eloChart.dart';
+import 'package:beachvolley_flutter/utils/globals.dart' as globals;
 
 class PlayerPage extends StatefulWidget {
   @override
@@ -46,7 +47,7 @@ class _PlayerPageState extends State<PlayerPage> {
 
   void loadPlayersList() async {
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getRankingEndpoint;
       var result = await http.get(
           Uri.parse(url),
           headers: {
@@ -70,7 +71,7 @@ class _PlayerPageState extends State<PlayerPage> {
   void loadPlayerData(String player) async {
     loadMatches();
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.getPlayerEndpoint + player;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getPlayerEndpoint + player;
       var result = await http.get(
           Uri.parse(url),
           headers: {
@@ -208,7 +209,7 @@ class _PlayerPageState extends State<PlayerPage> {
 
   void loadMatches() async{
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = "${ApiEndpoints.baseUrl}${ApiEndpoints.getMatchesEndpoint}?player=$currentUser";
+      final url = "${ApiEndpoints.baseUrl}${globals.selectedSport}${ApiEndpoints.getMatchesEndpoint}?player=$currentUser";
       var result = await http.get(
           Uri.parse(url),
           headers: {
