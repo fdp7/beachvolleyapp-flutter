@@ -1,3 +1,4 @@
+import 'package:beachvolley_flutter/login_widget.dart';
 import 'package:beachvolley_flutter/sideBarItem.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/utils/globals.dart' as globals;
@@ -15,15 +16,18 @@ class SideBar extends StatelessWidget {
           child: Column(
             children: [
               headerWidget(),
+              const SizedBox(height: 30,),
+              const Divider(thickness: 1, height: 10, color: Colors.grey,),
+              const SizedBox(height: 30,),
               SideBarItem(
-                  name: 'basket',
+                  name: globals.basketEndpoint,
                   icon: Icons.sports_basketball_rounded,
-                  onPressed: ()=> onSportSelected(context, 'basket')
+                  onPressed: ()=> onSportSelected(context, globals.basketEndpoint)
               ),
               SideBarItem(
-                  name: 'beachvolley',
+                  name: globals.beachvolleyEndpoint,
                   icon: Icons.sports_volleyball_rounded,
-                  onPressed: ()=> onSportSelected(context, 'beachvolley')
+                  onPressed: ()=> onSportSelected(context, globals.beachvolleyEndpoint)
               ),
               const SizedBox(height: 30,),
               const Divider(thickness: 1, height: 10, color: Colors.grey,),
@@ -47,7 +51,7 @@ class SideBar extends StatelessWidget {
 
   /// TODO: implement method
   logOut(BuildContext context){
-    Navigator.pop(context);
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
   Widget headerWidget(){
