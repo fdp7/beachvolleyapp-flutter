@@ -42,10 +42,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
     // set AppBar title
     if(_currentIndex == 0) {
-      globals.selectedPage = '${globals.leagueTitle} - ${globals.selectedSport}';
+      globals.selectedPage = globals.leagueTitle;
     }
     else if (_currentIndex == 1){
-      globals.selectedPage = '${globals.playerTitle} - ${globals.selectedSport}';
+      globals.selectedPage = globals.playerTitle;
     }
 
     _pageController.animateToPage(_currentIndex, duration: const Duration(milliseconds: 300), curve: Curves.ease);
@@ -142,7 +142,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         onTap: onTapped
       ),
       appBar: AppBar(
-        title: Text(globals.selectedPage, style: TextStyle(color: Colors.white),),
+        title: Text('${globals.selectedPage} - ${globals.selectedSport}', style: const TextStyle(color: Colors.white),),
         backgroundColor: const Color(0xFFd81159),
       ),
       drawer: const SideBar(),

@@ -1,3 +1,4 @@
+import 'package:beachvolley_flutter/home_widget.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
 import 'package:beachvolley_flutter/sideBarItem.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +11,14 @@ class SideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        color: Colors.black87,
+        color: const Color(0xFFd81159),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(24, 80, 24, 0),
           child: Column(
             children: [
-              headerWidget(),
+              //headerWidget(),
               const SizedBox(height: 30,),
-              const Divider(thickness: 1, height: 10, color: Colors.grey,),
+              const Divider(thickness: 1, height: 10, color: Colors.white,),
               const SizedBox(height: 30,),
               SideBarItem(
                   name: globals.basketEndpoint,
@@ -30,7 +31,7 @@ class SideBar extends StatelessWidget {
                   onPressed: ()=> onSportSelected(context, globals.beachvolleyEndpoint)
               ),
               const SizedBox(height: 30,),
-              const Divider(thickness: 1, height: 10, color: Colors.grey,),
+              const Divider(thickness: 1, height: 10, color: Colors.white,),
               SideBarItem(
                   name: 'log out',
                   icon: Icons.logout,
@@ -43,18 +44,18 @@ class SideBar extends StatelessWidget {
     );
   }
 
-  /// summary: set global variable SelectedSport to selected item
+  /// summary: set global variable SelectedSport to selected item; go back to home with refreshed data
   onSportSelected(BuildContext context, String name){
     globals.selectedSport = name;
-    Navigator.pop(context);
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Home()));
   }
 
-  /// TODO: implement method
   logOut(BuildContext context){
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
   Widget headerWidget(){
+
     return Row(
       children: [
         const CircleAvatar(
@@ -64,8 +65,8 @@ class SideBar extends StatelessWidget {
         const SizedBox(width: 40,),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('User name', style: TextStyle(fontSize: 14, color: Colors.white),)
+          children: [
+            const Text('User name', style: TextStyle(fontSize: 14, color: Colors.white),)
           ],
         )
       ],

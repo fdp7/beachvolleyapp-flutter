@@ -60,13 +60,13 @@ class _AddMatchState extends State<AddMatch> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.elderly_rounded, color: Colors.black87),
+                            //Icon(Icons.elderly_rounded, color: Colors.black87),
+                            Icon(Icons.favorite_border, color: Colors.black87),
                             Text("  Friends", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
                           ],
                         ),
                         const SizedBox(height: 1,),
                         MultiSelectDialogField(
-                          //title: const Text("Team A players"),
                           buttonIcon: const Icon(Icons.person_add),
                           buttonText: const Text("select friends"),
                           searchable: true,
@@ -100,13 +100,13 @@ class _AddMatchState extends State<AddMatch> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.precision_manufacturing_rounded, color: Colors.black87),
+                            //Icon(Icons.precision_manufacturing_rounded, color: Colors.black87),
+                            Icon(Icons.gpp_bad_outlined, color: Colors.black87),
                             Text("  Foes", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
                           ],
                         ),
                         const SizedBox(height: 1,),
                         MultiSelectDialogField(
-                          //title: const Text("Team B players"),
                           buttonIcon: const Icon(Icons.person_add),
                           buttonText: const Text("select foes"),
                           searchable: true,
@@ -206,7 +206,7 @@ class _AddMatchState extends State<AddMatch> {
     return areValid;
   }
 
-  /// Summary: draw match is not allowed
+  /// Summary: tie match is not allowed
   /// Returns bool
   bool validateScores(scoreA, scoreB){
     bool areValid = true;
@@ -274,7 +274,7 @@ class _AddMatchState extends State<AddMatch> {
       setState(() {
         isButtonDisabled = false;
       });
-      debugPrint("Only the Good God Dippi can establish a draw... YOU CANNOT. Please check scores");
+      debugPrint("Only the Good God Dippi can establish a tie... YOU CANNOT. Please check scores");
       messageContent = "Not even Dippi can establish a draw,\nof course you cannot!\n\nPlease check the scores";
     }
 

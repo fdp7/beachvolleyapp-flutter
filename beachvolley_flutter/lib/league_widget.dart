@@ -36,7 +36,8 @@ class _LeagueState extends State<League> {
   String currentUser = "";
   List<double> elo = [100.0];
 
-  final RefreshController _refreshController = RefreshController(initialRefresh: true);
+  //final RefreshController _refreshController = RefreshController(initialRefresh: true);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +174,8 @@ class _LeagueState extends State<League> {
   }
 
   void _onLoading() async {
+    loadRanking();
+    loadMatches();
     _refreshController.loadComplete();
   }
 

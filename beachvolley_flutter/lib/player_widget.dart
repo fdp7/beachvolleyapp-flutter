@@ -35,13 +35,14 @@ class _PlayerPageState extends State<PlayerPage> {
   String date = "";
 
   void _onRefresh() async{
-    // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
+    //await Future.delayed(const Duration(milliseconds: 1000));
     loadPlayerData(currentUser);
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async{
+    //await Future.delayed(const Duration(milliseconds: 1000));
+    loadPlayerData(currentUser);
     _refreshController.loadComplete();
   }
 
