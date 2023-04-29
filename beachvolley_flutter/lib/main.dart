@@ -6,12 +6,14 @@ import 'dart:convert';
 
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
 import 'package:beachvolley_flutter/home_widget.dart';
+import 'package:beachvolley_flutter/sideBar_widget.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:beachvolley_flutter/utils/globals.dart' as globals;
 
 void main() {
   runApp(App());
@@ -35,7 +37,7 @@ class _AppState extends State<App>{
   void tryConnection() async {
     await storage.read(key: "jwt").then((value) async {
       Future.delayed(const Duration(milliseconds: 2000), () {
-        final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
+        final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getRankingEndpoint;
         result = http.get(
             Uri.parse(url),
             headers: {

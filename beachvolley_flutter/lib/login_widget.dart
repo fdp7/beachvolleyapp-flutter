@@ -39,7 +39,7 @@ class LoginScreen extends StatelessWidget {
 
   Future<String?> _signup(SignupData data) {
     return Future.delayed(loginTime).then((_) async {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.registerPlayerEndpoint;
+      final url = ApiEndpoints.baseUrl + ApiEndpoints.registerUserEndpoint;
       var result = await http.post(
           Uri.parse(url),
           body: jsonEncode({

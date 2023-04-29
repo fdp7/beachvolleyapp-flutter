@@ -1,10 +1,10 @@
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
-import 'package:beachvolley_flutter/league_widget.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/models/Match.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:beachvolley_flutter/utils/globals.dart' as globals;
 
 class MatchCard extends StatelessWidget {
 
@@ -246,7 +246,7 @@ class MatchCard extends StatelessWidget {
       );*/
     }
 
-    final url = "${ApiEndpoints.baseUrl}${ApiEndpoints.deleteMatchEndpoint}?date=$dbDate";
+    final url = "${ApiEndpoints.baseUrl}${globals.selectedSport}${ApiEndpoints.deleteMatchEndpoint}?date=$dbDate";
     var result = await http.delete(
         Uri.parse(url),
         headers: {

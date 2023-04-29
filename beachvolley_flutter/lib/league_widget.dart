@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:beachvolley_flutter/utils/globals.dart' as globals;
 
 class League extends StatefulWidget {
   const League({super.key});
@@ -35,7 +36,8 @@ class _LeagueState extends State<League> {
   String currentUser = "";
   List<double> elo = [100.0];
 
-  final RefreshController _refreshController = RefreshController(initialRefresh: true);
+  //final RefreshController _refreshController = RefreshController(initialRefresh: true);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +83,7 @@ class _LeagueState extends State<League> {
   // get ranking
   void loadRanking() async {
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getRankingEndpoint;
       var result = await http.get(
           Uri.parse(url),
           headers: {
@@ -113,7 +115,7 @@ class _LeagueState extends State<League> {
   
   void loadMatches() async{
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.getMatchesEndpoint;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getMatchesEndpoint;
       var result = await http.get(
           Uri.parse(url),
           headers: {
@@ -172,6 +174,8 @@ class _LeagueState extends State<League> {
   }
 
   void _onLoading() async {
+    loadRanking();
+    loadMatches();
     _refreshController.loadComplete();
   }
 

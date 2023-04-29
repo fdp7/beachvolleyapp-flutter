@@ -1,5 +1,7 @@
 import 'package:beachvolley_flutter/addMatch_widget.dart';
+import 'package:beachvolley_flutter/main.dart';
 import 'package:beachvolley_flutter/player_widget.dart';
+import 'package:beachvolley_flutter/sideBar_widget.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/league_widget.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:beachvolley_flutter/utils/globals.dart' as globals;
 
 
 class Home extends StatefulWidget {
@@ -36,6 +39,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     setState(() {
       _currentIndex = index;
     });
+
+    // set AppBar title
+    if(_currentIndex == 0) {
+      globals.selectedPage = globals.leagueTitle;
+    }
+    else if (_currentIndex == 1){
+      globals.selectedPage = globals.playerTitle;
+    }
+
     _pageController.animateToPage(_currentIndex, duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
@@ -43,6 +55,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     jwtManager.init();
     super.initState();
+    const SideBar();
     _children = [
       const League(),
       PlayerPage(),
@@ -128,6 +141,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         notchMargin: 8,
         onTap: onTapped
       ),
+      appBar: AppBar(
+        title: Text('${globals.selectedPage} - ${globals.selectedSport}', style: const TextStyle(color: Colors.white),),
+        backgroundColor: const Color(0xFFd81159),
+      ),
+      drawer: const SideBar(),
     );
   }
 
@@ -137,7 +155,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         context: context,
         builder: (_) => const SizedBox(
           height: 750,
-          child: Scaffold(body:AddMatch()),
+          child: Scaffold(
+            body:AddMatch(),
+          ),
         )
     );
     _animationController.forward();

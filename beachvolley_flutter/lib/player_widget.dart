@@ -12,6 +12,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:beachvolley_flutter/models/Match.dart';
 import 'package:beachvolley_flutter/player_components/matchesColumnChart.dart';
 import 'package:beachvolley_flutter/player_components/eloChart.dart';
+import 'package:beachvolley_flutter/utils/globals.dart' as globals;
 
 class PlayerPage extends StatefulWidget {
   @override
@@ -34,19 +35,18 @@ class _PlayerPageState extends State<PlayerPage> {
   String date = "";
 
   void _onRefresh() async{
-    // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
     loadPlayerData(currentUser);
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async{
+    loadPlayerData(currentUser);
     _refreshController.loadComplete();
   }
 
   void loadPlayersList() async {
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.getRankingEndpoint;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getRankingEndpoint;
       var result = await http.get(
           Uri.parse(url),
           headers: {
@@ -70,7 +70,7 @@ class _PlayerPageState extends State<PlayerPage> {
   void loadPlayerData(String player) async {
     loadMatches();
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = ApiEndpoints.baseUrl + ApiEndpoints.getPlayerEndpoint + player;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getPlayerEndpoint + player;
       var result = await http.get(
           Uri.parse(url),
           headers: {
@@ -208,7 +208,7 @@ class _PlayerPageState extends State<PlayerPage> {
 
   void loadMatches() async{
     Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      final url = "${ApiEndpoints.baseUrl}${ApiEndpoints.getMatchesEndpoint}?player=$currentUser";
+      final url = "${ApiEndpoints.baseUrl}${globals.selectedSport}${ApiEndpoints.getMatchesEndpoint}?player=$currentUser";
       var result = await http.get(
           Uri.parse(url),
           headers: {
@@ -216,9 +216,8 @@ class _PlayerPageState extends State<PlayerPage> {
           }
       );
       var data = json.decode(result.body);
+      matches.clear();
       if (result.statusCode == 200) {
-        matches.clear();
-
         for (var i = 0; i < data["matches"].length; i++) {
           // make Date
           //date = DateTime.parse(data["matches"][i]["date"]).toLocal().toString();
@@ -271,7 +270,6 @@ class _PlayerPageState extends State<PlayerPage> {
   void initState() {
     jwtManager.init();
     loadPlayersList();
-    loadMatches();
     super.initState();
 
     var storage = const FlutterSecureStorage();
