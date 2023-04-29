@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:beachvolley_flutter/home_widget.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
 import 'package:beachvolley_flutter/sideBarItem.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/utils/globals.dart' as globals;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SideBar extends StatelessWidget {
   const SideBar({Key? key}) : super(key: key);
@@ -56,6 +59,16 @@ class SideBar extends StatelessWidget {
 
   Widget headerWidget(){
 
+    /// TODO: recuperare nome dell'utente così, ma la chiamata asincrona non completa prima del return Row
+    //var storage = const FlutterSecureStorage();
+    String username = '';
+    /*Future.delayed(const Duration(milliseconds: 500)).then((_) async {
+      await storage.read(key: "name").then((value) =>
+      {
+        username = value!
+      });
+    });*/
+
     return Row(
       children: [
         const CircleAvatar(
@@ -66,7 +79,7 @@ class SideBar extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('User name', style: TextStyle(fontSize: 14, color: Colors.white),)
+            Text(username, style: const TextStyle(fontSize: 14, color: Colors.white),)
           ],
         )
       ],

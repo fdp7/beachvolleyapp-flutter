@@ -167,7 +167,7 @@ class _AddMatchState extends State<AddMatch> {
   /// Summary: get ranking and sort names in alphabetical order
   void loadPlayersList() async {
     Future.delayed(const Duration(milliseconds: 1000)).then((_) async {
-      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getRankingEndpoint;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.getPlayersEndpoint;
       var result = await http.get(
           Uri.parse(url),
           headers: {
@@ -177,9 +177,9 @@ class _AddMatchState extends State<AddMatch> {
       var data = json.decode(result.body);
       if (result.statusCode == 200) {
         playerList.clear();
-        for (var i = 0; i < data["ranking"].length; i++) {
+        for (var i = 0; i < data["players"].length; i++) {
           setState(() {
-            playerList.add(data["ranking"][i]["name"]);
+            playerList.add(data["players"][i]["name"]);
           });
         }
         playerList.sort();

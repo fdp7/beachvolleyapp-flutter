@@ -35,13 +35,11 @@ class _PlayerPageState extends State<PlayerPage> {
   String date = "";
 
   void _onRefresh() async{
-    //await Future.delayed(const Duration(milliseconds: 1000));
     loadPlayerData(currentUser);
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async{
-    //await Future.delayed(const Duration(milliseconds: 1000));
     loadPlayerData(currentUser);
     _refreshController.loadComplete();
   }
@@ -218,9 +216,8 @@ class _PlayerPageState extends State<PlayerPage> {
           }
       );
       var data = json.decode(result.body);
+      matches.clear();
       if (result.statusCode == 200) {
-        matches.clear();
-
         for (var i = 0; i < data["matches"].length; i++) {
           // make Date
           //date = DateTime.parse(data["matches"][i]["date"]).toLocal().toString();
@@ -273,7 +270,6 @@ class _PlayerPageState extends State<PlayerPage> {
   void initState() {
     jwtManager.init();
     loadPlayersList();
-    loadMatches();
     super.initState();
 
     var storage = const FlutterSecureStorage();
