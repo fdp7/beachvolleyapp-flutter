@@ -7,7 +7,7 @@ class RankingView extends StatelessWidget {
   Widget? _data;
 
   RankingView(List<Player> playerList, bool rankingModePercentage, int? sortRankingColumnIndex, bool isRankingAscendingOrder, Function onTapCallback, {super.key}){
-    final columns = ['', 'Name', 'P', 'W', 'ELO'];
+    final columns = ['', 'Name', 'P', 'W', 'Elo'];
 
     List<DataCell> getCells(List<dynamic> cells) =>
         cells.map((data) =>
@@ -65,6 +65,7 @@ class RankingView extends StatelessWidget {
             )).toList();
 
     List<DataRow> getRows(List<Player> ranking) =>
+
         ranking.map((Player player) {
           final cells = [
             player.rank,
@@ -135,13 +136,14 @@ class RankingView extends StatelessWidget {
                     return Colors.white;
                   }),
                   headingTextStyle: const TextStyle(
+                    fontFamily: 'Gaoel',
                     color: Color(0xffd81159),
                     fontSize: 15,
                     fontWeight: FontWeight.w500
                   ),
                   dataTextStyle: const TextStyle(
                     color: Colors.black87,
-                    fontSize: 15
+                    fontSize: 17
                   ),
                 )
               ),

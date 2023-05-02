@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:beachvolley_flutter/home_widget.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
 import 'package:beachvolley_flutter/sideBarItem.dart';
+import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/utils/globals.dart' as globals;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SideBar extends StatelessWidget {
   const SideBar({Key? key}) : super(key: key);
+
+  static var jwtManager = JwtManager();
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +22,8 @@ class SideBar extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(24, 80, 24, 0),
           child: Column(
             children: [
-              //headerWidget(),
-              const SizedBox(height: 30,),
+              headerWidget(),
+              const SizedBox(height: 0,),
               const Divider(thickness: 1, height: 10, color: Colors.white,),
               const SizedBox(height: 30,),
               SideBarItem(
@@ -36,10 +39,12 @@ class SideBar extends StatelessWidget {
               const SizedBox(height: 30,),
               const Divider(thickness: 1, height: 10, color: Colors.white,),
               SideBarItem(
-                  name: 'log out',
+                  name: 'Log Out',
                   icon: Icons.logout,
                   onPressed: ()=> logOut(context)
               ),
+              const SizedBox(height: 400,),
+              const Text("Friends & Foes", style: TextStyle(color: Colors.white, fontSize: 40),),
             ],
           ),
         )
@@ -57,29 +62,28 @@ class SideBar extends StatelessWidget {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
+  /// Summary: retrieve user name
   Widget headerWidget(){
 
-    /// TODO: recuperare nome dell'utente così, ma la chiamata asincrona non completa prima del return Row
-    //var storage = const FlutterSecureStorage();
-    String username = '';
-    /*Future.delayed(const Duration(milliseconds: 500)).then((_) async {
-      await storage.read(key: "name").then((value) =>
-      {
-        username = value!
-      });
-    });*/
+    jwtManager.init();
+    var loggedUser = jwtManager.name;
 
     return Row(
       children: [
-        const CircleAvatar(
+        /*const CircleAvatar(
           radius: 40,
           backgroundColor: Colors.deepPurpleAccent,
-        ),
-        const SizedBox(width: 40,),
+        ),*/
+        const SizedBox(height: 50,),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(username, style: const TextStyle(fontSize: 14, color: Colors.white),)
+            Row(
+              children:[
+                //const Icon(Icons.verified_user, color: Colors.white, size: 20,),
+                Text(loggedUser!, style: const TextStyle(fontSize: 20, color: Colors.white),)
+              ]
+            )
           ],
         )
       ],

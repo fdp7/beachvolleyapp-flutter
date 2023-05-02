@@ -23,7 +23,7 @@ class LastMatches extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "Last Matches\n",
+                    "Last   Matches\n",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w400,

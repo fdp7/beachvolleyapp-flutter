@@ -77,8 +77,8 @@ class _AppState extends State<App>{
         const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
             statusBarColor: Colors.transparent,
-            systemNavigationBarDividerColor: Color(0xffd81159),
-            systemNavigationBarColor: Color(0xffd81159),
+            systemNavigationBarDividerColor: Colors.white,
+            systemNavigationBarColor: Colors.white,
             systemNavigationBarIconBrightness: Brightness.light
         )
     );
@@ -89,9 +89,43 @@ class _AppState extends State<App>{
     ]);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'Gaoel',
+        primarySwatch: const MaterialColor(
+            0xffd81159,
+            {
+              50:Color.fromRGBO(216,17,89, 1),
+              100:Color.fromRGBO(216,17,89, 1),
+              200:Color.fromRGBO(216,17,89, 1),
+              300:Color.fromRGBO(216,17,89, 1),
+              400:Color.fromRGBO(216,17,89, 1),
+              500:Color.fromRGBO(216,17,89, 1),
+              600:Color.fromRGBO(216,17,89, 1),
+              700:Color.fromRGBO(216,17,89, 1),
+              800:Color.fromRGBO(216,17,89, 1),
+              900:Color.fromRGBO(216,17,89, 1),
+            }
+        ),
+        textTheme: const TextTheme(
+          headline3: TextStyle(
+            fontFamily: 'Gaoel',
+            fontSize: 45.0,
+            color: Colors.white,
+          ),
+          button: TextStyle(
+            fontFamily: 'Gaoel',
+          ),
+        ),
+      ),
+      home: _body,
+
+    );
+
+    /*return MaterialApp(
       home: Scaffold (
         body: _body,
       ),
-    );
+    );*/
   }
 }

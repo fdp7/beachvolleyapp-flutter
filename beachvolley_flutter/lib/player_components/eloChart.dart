@@ -17,9 +17,10 @@ class EloChart extends StatelessWidget {
       ),
       child: SfCartesianChart(
         title: ChartTitle(
-          text: "ELO",
+          text: "Elo",
           textStyle: const TextStyle(
-            color: Colors.black87, //Color(0xffd4d4d3),
+            fontFamily: "Gaoel",
+            color: Colors.black,
             fontWeight: FontWeight.w700,
             fontSize: 18
           )

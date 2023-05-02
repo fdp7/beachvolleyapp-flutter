@@ -128,7 +128,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                   (Route<dynamic> route) => false,
                             );
                           },
-                          child: Text('Exit'.toUpperCase(), style: const TextStyle(fontSize: 16, color: Colors.white)),
+                          child: const Text('Exit', style: TextStyle(fontSize: 16, color: Colors.white)),
                         ),
                       )
                   );
@@ -139,7 +139,7 @@ class _PlayerPageState extends State<PlayerPage> {
                 builder: (BuildContext context) {
                   // return alert dialog object
                   return AlertDialog(
-                      title: const Text('Select a player', style: TextStyle(color: Color(0xffd81159))),
+                      title: const Text('Select   A   Player', style: TextStyle(color: Color(0xffd81159))),
                       content: SizedBox(
                           height: 300.0, // Change as per your requirement
                           width: 300.0, // Change as per your requirement
@@ -182,7 +182,7 @@ class _PlayerPageState extends State<PlayerPage> {
                 children: const [
                   SizedBox(height: 30,),
                   Text(
-                    "Career Data",
+                    "Career   Data",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                   ),
                 ],

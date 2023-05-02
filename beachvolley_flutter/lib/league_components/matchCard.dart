@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
@@ -31,53 +33,76 @@ class MatchCard extends StatelessWidget {
           color: Colors.transparent,
           child: Column(
             children: [
-              SizedBox(
-                  width: 300,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 230), //make space between columns
-                      Column(
-                        // delete
-                          mainAxisAlignment: MainAxisAlignment.center,
+              Row(
+                children: [
+                  //const SizedBox(width: 230), //make space between columns
+                  SizedBox(
+                    child: Row(
+                      children: [
+                        Column(
+                          // date
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.delete_outline,
-                                  size: 23,
-                                  color: Color(0xffd4d4d3)),
-                              onPressed: () => showDialog(
+                            Row(
+                              children: [
+                                const Icon(Icons.date_range, size: 23, color: Color(0xffd4d4d3)),
+                                const Text("   "),
+                                Text(
+                                  "${refactorDateToDisplay(match.date)[0]}    ${refactorDateToDisplay(match.date)[1]}",
+                                  style: const TextStyle(
+                                      fontSize: 17,
+                                      color: Color(0xffd4d4d3)
+                                  ),
+                                )
+                              ],
+                            )
+                          ]
+                        ),
+                        const SizedBox(width: 30), //make space between columns
+                        Column(
+                            // delete
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline,
+                                size: 23,
+                                color: Color(0xffd4d4d3)),
+                                onPressed: () => showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: const Text('Delete Match?', style: TextStyle(color: Colors.black87)),
+                                      title: const Text('Delete Match?', style: TextStyle(color: Colors.black87), textAlign: TextAlign.center,),
                                       content: Container(
                                         height: 100,
                                         width: 150,
                                         padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
                                         child: ElevatedButton(
-                                          onPressed: () {
-                                            var credentials = initJwtManager();
-                                            deleteMatchByDate(context, credentials, match);
-                                          },
-                                          child: Text(
-                                            'yes'.toUpperCase(),
-                                            style: const TextStyle(fontSize: 16, color: Colors.white, )
-                                          )
+                                            onPressed: () {
+                                              var credentials = initJwtManager();
+                                              deleteMatchByDate(context, credentials, match);
+                                            },
+                                            child: const Text(
+                                                'Yes',
+                                                style: TextStyle(fontSize: 16, color: Colors.white, )
+                                            )
                                         ),
                                       ),
                                     );
                                   }
-                              ),
-                            )
-                          ]
-                      )
-                    ]
-                  )
+                                ),
+                              )
+                            ]
+                        )
+                      ]
+                    )
+                  ),
+                ],
               ),
               Row(
                 children: [
                   SizedBox(
-                    width: 110,
-                    height: 100,
+                    width: 130,
+                    height: 130,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,13 +126,13 @@ class MatchCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("${match.score_a}-${match.score_b}", style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w700,),)
+                        Text("${match.score_a}-${match.score_b}", style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w500,),)
                       ],
                     ),
                   ),
                   SizedBox(
-                    width: 110,
-                    height: 160,
+                    width: 130,
+                    height: 130,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,7 +151,7 @@ class MatchCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              /*SizedBox(
                 child: Row(
                   children: [
                     Column(
@@ -135,10 +160,10 @@ class MatchCard extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.date_range, size: 23, color: Color(0xffd4d4d3)),
+                              const Icon(Icons.access_time, size: 23, color: Color(0xffd4d4d3)),
                               const Text("   "),
                               Text(
-                                refactorDateToDisplay(match.date),
+                                refactorDateToDisplay(match.date)[1],
                                 style: const TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w400,
@@ -151,7 +176,7 @@ class MatchCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              )
+              )*/
             ],
           ),
         )
@@ -211,9 +236,9 @@ class MatchCard extends StatelessWidget {
       rows.add(Text(
         teamPlayers[i].toString(),
         style: TextStyle(
+          fontFamily: "OpenSans",
           fontSize: fontSize,
           fontWeight: fontWeight,
-          fontStyle: FontStyle.italic,
           color: c
         )
       ));
@@ -271,10 +296,26 @@ class MatchCard extends StatelessWidget {
   }
 
   /// Summary: refactor date
-  String refactorDateToDisplay(String date){
+  List<String> refactorDateToDisplay(String date){
     DateTime datetime = DateTime.parse(match.date);
-    String displayDate = "${datetime.day.toString()}/${datetime.month.toString()}/${datetime.year.toString()} ${datetime.hour.toString()}:${datetime.minute.toString()}";
-    return displayDate;
+    String displayDate = "${datetime.day.toString()}/${datetime.month.toString()}/${datetime.year.toString()}";
+    String displayTime = "${datetime.hour.toString()}:${datetime.minute.toString()}";
+    displayTime = refactorTimeValuesToDisplay(displayTime);
+
+    List<String> displayDateTime = [displayDate, displayTime];
+    return displayDateTime;
+  }
+
+  ///Summary: refactor datetime adding zero to single values
+  String refactorTimeValuesToDisplay(String time){
+    List<String> splittedTime = time.split(":");
+    for (int i = 0; i < splittedTime.length; i ++){
+      if (splittedTime[i].length == 1){
+        splittedTime[i] = "0${splittedTime[i]}";
+      }
+    }
+    String refactoredTimeValues = "${splittedTime[0]}:${splittedTime[1]}";
+    return refactoredTimeValues;
   }
 
   List<String?> initJwtManager(){

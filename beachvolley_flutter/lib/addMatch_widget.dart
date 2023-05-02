@@ -61,7 +61,7 @@ class _AddMatchState extends State<AddMatch> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             //Icon(Icons.elderly_rounded, color: Colors.black87),
-                            Icon(Icons.favorite_border, color: Colors.black87),
+                            Icon(Icons.fiber_smart_record_outlined, color: Colors.black87),
                             Text("  Friends", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
                           ],
                         ),
@@ -101,7 +101,7 @@ class _AddMatchState extends State<AddMatch> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             //Icon(Icons.precision_manufacturing_rounded, color: Colors.black87),
-                            Icon(Icons.gpp_bad_outlined, color: Colors.black87),
+                            Icon(Icons.toll, color: Colors.black87),
                             Text("  Foes", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
                           ],
                         ),
@@ -154,7 +154,7 @@ class _AddMatchState extends State<AddMatch> {
                           borderRadius: BorderRadius.circular(10.0)
                       )
                   ),
-                  child: Text('Save Match'.toUpperCase(), style: const TextStyle(fontSize: 20, color: Colors.white)),
+                  child: const Text('Save Match', style: TextStyle(fontSize: 20, color: Colors.white)),
                 ),
               )
             )
