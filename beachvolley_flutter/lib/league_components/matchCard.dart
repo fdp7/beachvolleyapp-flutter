@@ -50,15 +50,15 @@ class MatchCard extends StatelessWidget {
                                 Text(
                                   "${refactorDateToDisplay(match.date)[0]}    ${refactorDateToDisplay(match.date)[1]}",
                                   style: const TextStyle(
-                                      fontSize: 17,
-                                      color: Color(0xffd4d4d3)
-                                  ),
+                                    fontSize: 17,
+                                    color: Color(0xffd4d4d3)
+                                  )
                                 )
                               ],
                             )
                           ]
                         ),
-                        const SizedBox(width: 30), //make space between columns
+                        const SizedBox(width: 40), //make space between columns
                         Column(
                             // delete
                             mainAxisAlignment: MainAxisAlignment.start,

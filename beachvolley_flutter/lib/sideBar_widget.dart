@@ -6,7 +6,6 @@ import 'package:beachvolley_flutter/sideBarItem.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
 import 'package:beachvolley_flutter/utils/globals.dart' as globals;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SideBar extends StatelessWidget {
   const SideBar({Key? key}) : super(key: key);
@@ -66,7 +65,8 @@ class SideBar extends StatelessWidget {
   Widget headerWidget(){
 
     jwtManager.init();
-    var loggedUser = jwtManager.name;
+    String? loggedUser = jwtManager.name;
+    loggedUser ??= ''; //if null, then ''; instead of nullsafety error
 
     return Row(
       children: [
