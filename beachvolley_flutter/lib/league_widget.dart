@@ -69,12 +69,8 @@ class _LeagueState extends State<League> {
 
   Widget ranking() =>
       SliverToBoxAdapter(
-        child: RankingView(playerList, rankingModePercentage, sortRankingColumnIndex, isRankingAscendingOrder, () {
-          setState(() {
-            rankingModePercentage = !rankingModePercentage;
-          });
-        }),
-      );
+        child: RankingView(playerList)
+        );
 
   Widget lastMatches() => SliverToBoxAdapter(
     child: LastMatches(currentUser, matches),

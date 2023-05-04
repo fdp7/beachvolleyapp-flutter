@@ -1,12 +1,13 @@
 import 'package:beachvolley_flutter/models/Player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RankingView extends StatelessWidget {
 
   Widget? _data;
 
-  RankingView(List<Player> playerList, bool rankingModePercentage, int? sortRankingColumnIndex, bool isRankingAscendingOrder, Function onTapCallback, {super.key}){
+  /*RankingView(List<Player> playerList, bool rankingModePercentage, int? sortRankingColumnIndex, bool isRankingAscendingOrder, Function onTapCallback, {super.key}){
     final columns = ['', 'Name', 'P', 'W', 'Elo'];
 
     List<DataCell> getCells(List<dynamic> cells) =>
@@ -76,12 +77,20 @@ class RankingView extends StatelessWidget {
           ];
           return DataRow(
             cells: getCells(cells),
-            /*color: MaterialStateProperty.resolveWith((_) {
-              if (player.rank.isOdd) {
-                return Colors.white;
+            color: MaterialStateProperty.resolveWith((_) {
+              if (player.rank == 1) {
+                return const Color(0xffffd700).withOpacity(0.6);//Colors.yellow.shade600;
               }
-              return Colors.grey.shade50;
-            })*/
+              else if (player.rank == 2){
+                return Colors.grey.shade300.withOpacity(0.8);
+              }
+              else if (player.rank == 3){
+                return const Color(0xffd7995b).withOpacity(0.7);//Colors.orange.shade200;
+              }
+              else {
+                return Colors.grey.shade50;
+              }
+            })
           );
         }).toList();
 
@@ -132,9 +141,6 @@ class RankingView extends StatelessWidget {
                   headingRowColor: MaterialStateColor.resolveWith((_) =>
                     Colors.white //Color(0xffebebea)
                   ),
-                  dataRowColor: MaterialStateProperty.resolveWith((states) {
-                    return Colors.white;
-                  }),
                   headingTextStyle: const TextStyle(
                     fontFamily: 'Gaoel',
                     color: Color(0xffd81159),
@@ -144,6 +150,11 @@ class RankingView extends StatelessWidget {
                   dataTextStyle: const TextStyle(
                     color: Colors.black87,
                     fontSize: 17
+                  ),
+                  border: TableBorder.all(
+                    color: const Color(0xffebebea),
+                    borderRadius: BorderRadius.circular(20),
+                    style: BorderStyle.none
                   ),
                 )
               ),
@@ -156,6 +167,125 @@ class RankingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         child: _data
+    );
+  }*/
+
+  RankingView(List<Player> playerList, {super.key}){
+
+    Color goldColor = const Color(0xffffd700).withOpacity(0.6);
+    Color silverColor = const Color(0xffd5d5d7).withOpacity(0.6); //Colors.grey.shade300.withOpacity(0.8);
+    Color bronzeColor = const Color(0xffd7995b).withOpacity(0.6);
+    DataCell iconForRanking(Player player){
+      if (player.rank == 1){
+        return const DataCell(FaIcon(FontAwesomeIcons.crown, color: Color(0xffd81159)),);
+      }
+      else if (player.rank == 2){
+        return DataCell(FaIcon(FontAwesomeIcons.medal, color: silverColor.withAlpha(250)),);
+      }
+      else if (player.rank == 3){
+        return DataCell(FaIcon(FontAwesomeIcons.medal, color: bronzeColor,));
+      }
+      else {
+        return const DataCell(Icon(Icons.accessibility_sharp, color: Colors.white,));
+      }
+    }
+    
+    _data = GestureDetector(
+      child: DataTable(
+        columns: const <DataColumn>[
+          DataColumn(
+            numeric: true,
+            label: FaIcon(
+              FontAwesomeIcons.crown,
+              color: Colors.white,
+            ),
+          ),
+          DataColumn(
+            label: Text('Name')
+          ),
+          DataColumn(
+            label: Text('P')
+          ),
+          DataColumn(
+              label: Text('W')
+          ),
+          DataColumn(
+              label: Text('Elo')
+          )
+        ],
+        rows: playerList.map<DataRow>((p) => DataRow(
+          cells: <DataCell>[
+            iconForRanking(p),
+            DataCell(Text(p.name)),
+            DataCell(Text('${p.match_count}')),
+            DataCell(Text('${p.win_count}')),
+            DataCell(Text('${p.last_elo}'))
+          ],
+          color: MaterialStateProperty.resolveWith((_) {
+            if (p.rank == 1){
+              return goldColor;
+            }
+            else if (p.rank == 2){
+              return silverColor;
+            }
+            else if (p.rank == 3){
+              return bronzeColor;
+            }
+            else {
+              return Colors.transparent;
+            }
+          })
+        )).toList(),
+        dataRowHeight: 50,
+        showBottomBorder: false,
+        columnSpacing: 15,
+        headingTextStyle: const TextStyle(
+            fontFamily: 'Gaoel',
+            color: Color(0xffd81159),
+            fontSize: 17,
+            fontWeight: FontWeight.w500
+        ),
+        dataTextStyle: const TextStyle(
+            color: Colors.black87,
+            fontSize: 17
+        ),
+      ),
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  SizedBox(height: 20,),
+                  Text(
+                    "Ranking",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400, fontFamily: 'Gaoel'),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        Container(
+            //margin: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+            ),
+            child: _data
+        ),
+        const SizedBox(height: 40,)
+      ],
     );
   }
 
