@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -30,7 +32,7 @@ class EloChart extends StatelessWidget {
         series: <ChartSeries>[
           LineSeries<EloData, double>(
             name: "elo trend",
-            width: 5,
+            width: 6,
             dataSource: getEloData(elo),
             xValueMapper: (EloData eloData, _) => eloData.x,
             yValueMapper: (EloData eloData, _) => eloData.elo_i,
@@ -40,12 +42,25 @@ class EloChart extends StatelessWidget {
             color: const Color(0xff0496ff),
             animationDelay: 5
           ),
+          LineSeries<EloData, double>(
+            name: "elo avg",
+            isVisibleInLegend: true,
+            width: 1,
+            dashArray: <double>[5,5],
+            dataSource: getEloDataAvg(elo),
+            xValueMapper: (EloData eloData, _) => eloData.x,
+            yValueMapper: (EloData eloData, _) => eloData.elo_i,
+            color: const Color(0xffd81159),
+            animationDelay: 5
+          ),
         ],
         primaryXAxis: NumericAxis(
           isVisible: false
         ),
         primaryYAxis: NumericAxis(
-            isVisible: false
+          isVisible: false,
+          minimum: getMinMaxYAxis(elo).min,
+          maximum: getMinMaxYAxis(elo).max
         ),
       ),
     );
@@ -62,8 +77,43 @@ List<EloData> getEloData(List<dynamic> elo) {
   return eloData;
 }
 
+List<EloData> getEloDataAvg(List<dynamic> elo){
+  List<EloData> eloData = [];
+
+  double eloAvg = elo.map((e) => e).reduce((a, b) => a + b) / elo.length;
+
+  double i = 0.0;
+  for (var elo_i in elo) {
+    i++;
+    eloData.add(EloData(i, eloAvg));
+  }
+  return eloData;
+}
+
 class EloData {
   EloData(this.x, this.elo_i);
   final double x;
   final double elo_i;
+}
+
+MinMaxYAxis getMinMaxYAxis(List<double> elo){
+  double minElo = 100;
+  double maxElo = 100;
+  double offset = 10;
+
+  for (var elo_i in elo){
+    minElo = min(minElo, elo_i);
+    maxElo = max(maxElo, elo_i);
+  }
+
+  double minAxis = minElo - offset;
+  double maxAxis = maxElo + offset;
+
+  return MinMaxYAxis(minAxis, maxAxis);
+}
+
+class MinMaxYAxis{
+  MinMaxYAxis(this.min, this.max);
+  final double min;
+  final double max;
 }
