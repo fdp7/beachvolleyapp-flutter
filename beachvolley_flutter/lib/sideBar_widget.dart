@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:beachvolley_flutter/home_widget.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
 import 'package:beachvolley_flutter/sideBarItem.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:beachvolley_flutter/utils/globals.dart' as globals;
 
 class SideBar extends StatelessWidget {
@@ -32,8 +31,13 @@ class SideBar extends StatelessWidget {
               ),
               SideBarItem(
                   name: globals.beachvolleyEndpoint,
-                  icon: Icons.sports_volleyball_rounded,
+                  icon: Icons.beach_access_rounded,
                   onPressed: ()=> onSportSelected(context, globals.beachvolleyEndpoint)
+              ),
+              SideBarItem(
+                  name: globals.poolEndpoint,
+                  icon: const IconData(0xe9b5, fontFamily: "RPGAwesome"),
+                  onPressed: ()=> onSportSelected(context, globals.poolEndpoint)
               ),
               const SizedBox(height: 30,),
               const Divider(thickness: 1, height: 10, color: Colors.white,),
@@ -81,7 +85,7 @@ class SideBar extends StatelessWidget {
             Row(
               children:[
                 //const Icon(Icons.verified_user, color: Colors.white, size: 20,),
-                Text(loggedUser!, style: const TextStyle(fontSize: 20, color: Colors.white),)
+                Text(loggedUser, style: const TextStyle(fontSize: 20, color: Colors.white),)
               ]
             )
           ],

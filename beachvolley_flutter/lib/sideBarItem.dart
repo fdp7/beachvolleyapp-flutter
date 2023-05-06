@@ -4,7 +4,7 @@ class SideBarItem extends StatelessWidget {
   const SideBarItem({Key? key, required this.name, required this.icon, required this.onPressed}) : super(key: key);
 
   final String name;
-  final IconData icon;
+  final dynamic icon; // dynamic in order to use different widgets as icon
   final Function() onPressed;
 
   @override
