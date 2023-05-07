@@ -46,8 +46,31 @@ class SideBar extends StatelessWidget {
                   icon: Icons.logout,
                   onPressed: ()=> logOut(context)
               ),
-              const SizedBox(height: 400,),
-              const Text("Friends & Foes", style: TextStyle(color: Colors.white, fontSize: 40),),
+              const SizedBox(height: 300,),
+              RichText(
+                text: const TextSpan(
+                  text: "Friends & Foes",
+                  style: TextStyle(color: Colors.white, fontSize: 45, fontFamily: "Gaoel"),
+                  children: [
+                    TextSpan(
+                      text: "         ",
+                    ),
+                    TextSpan(
+                        text: "FDP7",
+                        style: TextStyle(color: Colors.white, fontSize: 15, fontFamily: "Gaoel")
+                    )
+                  ]
+                ),
+                textAlign: TextAlign.justify,
+              )
+              /*const Text("Friends & Foes",
+                style: TextStyle(color: Colors.white, fontSize: 45),
+                textAlign: TextAlign.justify,
+              ),
+              const Text("                                                                                  FDP7",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+                textAlign: TextAlign.end,
+              )*/
             ],
           ),
         )
