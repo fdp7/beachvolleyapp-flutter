@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +29,14 @@ class MatchCard extends StatelessWidget {
         ),
         child: Container(
           color: Colors.transparent,
+          /*decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                "images/fieldbeachvolley3.png"
+              ),
+              fit: BoxFit.scaleDown
+            )
+          ),*/
           child: Column(
             children: [
               Row(

@@ -31,7 +31,7 @@ class SideBar extends StatelessWidget {
               ),
               SideBarItem(
                   name: globals.beachvolleyEndpoint,
-                  icon: Icons.beach_access_rounded,
+                  icon: Icons.sports_volleyball_rounded,
                   onPressed: ()=> onSportSelected(context, globals.beachvolleyEndpoint)
               ),
               SideBarItem(

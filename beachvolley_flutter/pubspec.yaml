@@ -77,8 +77,14 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/beachvolleyfield.jpg
-    - images/beachvolleyfield1.jpg
+    - images/fieldbeachvolley.png
+    - images/fieldbeachvolley.svg
+    - images/fieldbeachvolley1.png
+    - images/fieldbeachvolley2.png
+    - images/fieldbeachvolley3.png
+    - images/fieldbasket.png
+    - images/fieldbasket1.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

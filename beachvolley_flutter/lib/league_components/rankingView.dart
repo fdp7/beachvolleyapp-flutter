@@ -279,7 +279,7 @@ class RankingView extends StatelessWidget {
         Container(
             //margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               color: Colors.white,
             ),
             child: _data
