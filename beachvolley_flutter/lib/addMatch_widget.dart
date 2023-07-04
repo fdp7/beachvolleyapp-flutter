@@ -23,7 +23,7 @@ class _AddMatchState extends State<AddMatch> {
 
   bool isButtonDisabled = false;
 
-  List<String> playerList = ["Please close popup and retry."];
+  List<String> playerList = ["Please retry"];
   List<String> teamA = [];
   List<String> teamB = [];
   int scoreA = 0;
@@ -246,7 +246,7 @@ class _AddMatchState extends State<AddMatch> {
         debugPrint(scoreA.toString());
         debugPrint(scoreB.toString());
         debugPrint(currentDate.toString());
-        messageContent = "Dippi said the match shall be saved";
+        messageContent = "And the 7th day FDP7 said:\n\n'The match shall be saved'";
         setState(() {
           isButtonDisabled = true;
         });
@@ -255,27 +255,27 @@ class _AddMatchState extends State<AddMatch> {
         setState(() {
           isButtonDisabled = false;
         });
-        debugPrint("An unexpected error occurred! Please report to Dippi");
-        messageContent = "An unexpected error occurred!\n\nPlease report to Dippi";
+        debugPrint("An unexpected error occurred! Please report to FDP7");
+        messageContent = "An unexpected error occurred!\n\nPlease report to FDP7";
       }
     } else if (validTeams == 1) {
       setState(() {
         isButtonDisabled = false;
       });
-      debugPrint("In the beginning the Good God Dippi was alone... but I guess you were not. Please check players");
-      messageContent = "In the beginning Dippi was alone...\nbut I guess you were not\n\nPlease check the players";
+      debugPrint("In the beginning the Good God FDP7 was alone... but I guess you were not. Please check players");
+      messageContent = "In the beginning FDP7 was alone...\nbut I guess you were not\n\nPlease check the players";
     } else if (validTeams == 2) {
       setState(() {
         isButtonDisabled = false;
       });
-      debugPrint("A player can't be ubiquitous as the Good God Dippi! Please check players");
-      messageContent = "A player can't be ubiquitous as Dippi!\n\nPlease check duplicate players";
+      debugPrint("A player can't be ubiquitous as the Good God FDP7! Please check players");
+      messageContent = "Only FDP7 is ubiquitous\n\nPlease check duplicate players";
     } else if (!validScores) {
       setState(() {
         isButtonDisabled = false;
       });
-      debugPrint("Only the Good God Dippi can establish a tie... YOU CANNOT. Please check scores");
-      messageContent = "Not even Dippi can establish a draw,\nof course you cannot!\n\nPlease check the scores";
+      debugPrint("Only the Good God FDP7 can establish a tie... YOU CANNOT. Please check scores");
+      messageContent = "Only FDP7 can establish a tie,\nyou cannot.\n\nPlease check the scores";
     }
 
     setState(() {

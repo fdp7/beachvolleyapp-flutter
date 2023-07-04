@@ -107,7 +107,7 @@ class MatchCard extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(
-                    width: 130,
+                    width: 140,
                     height: 130,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -126,7 +126,7 @@ class MatchCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: 60,
+                    width: 70,
                     height: 160,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -137,7 +137,7 @@ class MatchCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: 130,
+                    width: 140,
                     height: 130,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

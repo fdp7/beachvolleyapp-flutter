@@ -55,7 +55,12 @@ class LoginScreen extends StatelessWidget {
             password: (data.password).toString()
         ));
       }
-      return "Sign Up failed\n Another user with same name already exists.";
+      else if ((data.name).toString().length < 3  || (data.name).toString().length > 10){
+        return "Username must contain from 2 to 10 characters";
+      }
+      else {
+        return "Sign Up failed\n Another user with same name already exists.";
+      }
     });
   }
 
@@ -104,7 +109,7 @@ class LoginScreen extends StatelessWidget {
         goBackButton: 'Back',
         confirmPasswordError: 'Confirm Password does not match Password',
         recoverPasswordDescription: 'Password Recovery service is not available yet',
-        recoverPasswordSuccess: 'Your request have been ignored, please contact Dippi',
+        recoverPasswordSuccess: 'Your request have been ignored, please contact FDP7',
       ),
     );
   }
