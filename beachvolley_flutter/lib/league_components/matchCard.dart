@@ -157,32 +157,6 @@ class MatchCard extends StatelessWidget {
                   ),
                 ],
               ),
-              /*SizedBox(
-                child: Row(
-                  children: [
-                    Column(
-                      // date
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.access_time, size: 23, color: Color(0xffd4d4d3)),
-                              const Text("   "),
-                              Text(
-                                refactorDateToDisplay(match.date)[1],
-                                style: const TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xffd4d4d3)
-                                ),
-                              )
-                            ],
-                          )
-                        ]
-                    ),
-                  ],
-                ),
-              )*/
             ],
           ),
         )
@@ -228,12 +202,12 @@ class MatchCard extends StatelessWidget {
       FontWeight fontWeight = FontWeight.w500;
       if (teamPlayers[i].toString() == currentUser){
         if (currentUserWon) {
-          c = const Color(0xff0496ff);
+          c = Colors.greenAccent.shade700.withAlpha(150);//Color(0xff0496ff);
           fontSize = 20;
           fontWeight = FontWeight.w700;
         }
         else {
-          c = const Color(0xffefca08);
+          c = Colors.redAccent;
           fontSize = 20;
           fontWeight = FontWeight.w700;
         }

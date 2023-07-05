@@ -21,6 +21,8 @@ class _AddMatchState extends State<AddMatch> {
   static var jwtManager = JwtManager();
   var storage = const FlutterSecureStorage();
 
+  late Animation<double> animation;
+
   bool isButtonDisabled = false;
 
   List<String> playerList = ["Please retry"];
@@ -65,7 +67,6 @@ class _AddMatchState extends State<AddMatch> {
                             Text("  Friends", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
                           ],
                         ),
-                        const SizedBox(height: 1,),
                         MultiSelectDialogField(
                           buttonIcon: const Icon(Icons.person_add),
                           buttonText: const Text("select friends"),
@@ -80,13 +81,14 @@ class _AddMatchState extends State<AddMatch> {
                           onConfirm: (values) {
                             teamA = values;
                           },
+                          confirmText: const Text("Ok", style: TextStyle(color: Color(0xffd81159)),),
+                          cancelText: const Text("Cancel", style: TextStyle(color: Color(0xffd81159)),),
                         ),
-                        const SizedBox(height: 1,),
                         NumberPicker(
                           value: scoreA,
                           selectedTextStyle: const TextStyle(color: Color(0xffd81159), fontSize: 50, fontWeight: FontWeight.w400),
                           minValue: 0,
-                          maxValue: 40,
+                          maxValue: 99,
                           itemHeight: 120,
                           itemWidth: 80,
                           onChanged: (num) {
@@ -96,7 +98,7 @@ class _AddMatchState extends State<AddMatch> {
                           },
                           axis: Axis.horizontal,
                         ),
-                        const SizedBox(height: 40,),
+                        const SizedBox(height: 20,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
@@ -105,7 +107,6 @@ class _AddMatchState extends State<AddMatch> {
                             Text("  Foes", style: TextStyle(color: Colors.black87, fontSize: 24, fontWeight: FontWeight.w500),)
                           ],
                         ),
-                        const SizedBox(height: 1,),
                         MultiSelectDialogField(
                           buttonIcon: const Icon(Icons.person_add),
                           buttonText: const Text("select foes"),
@@ -120,13 +121,14 @@ class _AddMatchState extends State<AddMatch> {
                           onConfirm: (values) {
                             teamB = values;
                           },
+                          confirmText: const Text("Ok", style: TextStyle(color: Color(0xffd81159)),),
+                          cancelText: const Text("Cancel", style: TextStyle(color: Color(0xffd81159)),),
                         ),
-                        const SizedBox(height: 1,),
                         NumberPicker(
                           value: scoreB,
                           selectedTextStyle: const TextStyle(color: Color(0xffd81159), fontSize: 50, fontWeight: FontWeight.w400),
                           minValue: 0,
-                          maxValue: 40,
+                          maxValue: 99,
                           itemHeight: 120,
                           itemWidth: 80,
                           onChanged: (num) {
@@ -135,29 +137,56 @@ class _AddMatchState extends State<AddMatch> {
                             });
                           },
                           axis: Axis.horizontal,
-                        ),
+                        )
                       ],
                     ),
                   )
                 ),
               ],
             ),
-            const SizedBox(height: 15),
-            Expanded(
+            SizedBox(
+              width: 1000,
+              height: 30,
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                  onPressed: isButtonDisabled ? null : () { saveMatch(); },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffd81159),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0)
-                      )
-                  ),
-                  child: const Text('Save Match', style: TextStyle(fontSize: 20, color: Colors.white)),
-                ),
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    const SizedBox(
+                      width: 70,
+                      height: 30,
+                    ),
+                    ElevatedButton(
+                      onPressed: isButtonDisabled ? null : () { saveMatch(); },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xffd81159),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      child: const Text('Save Match', style: TextStyle(fontSize: 20, color: Colors.white)),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                      height: 30,
+                    ),
+                    ElevatedButton(
+                      onPressed: isButtonDisabled ? null : () { balanceTeams(); },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xffebebea),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)
+                          )
+                      ),
+                      child: const Text('Balance Teams', style: TextStyle(fontSize: 20, color: Color(0xff006ba6))),
+                    ),
+                    const SizedBox(
+                      width: 70,
+                      height: 30,
+                    )
+                  ],
+                ))
               )
-            )
           ],
         )
       ),
@@ -281,20 +310,81 @@ class _AddMatchState extends State<AddMatch> {
     setState(() {
       isButtonDisabled = false;
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Container(
-              padding: const EdgeInsets.all(16),
-              alignment: Alignment.bottomCenter,
-              height: 110,
-              child: Text(
-                messageContent,
-                style: const TextStyle(
-                  fontSize: 15
-                ),
+        SnackBar(
+          content: Container(
+            padding: const EdgeInsets.all(16),
+            alignment: Alignment.bottomCenter,
+            height: 110,
+            child: Text(
+              messageContent,
+              style: const TextStyle(
+                fontSize: 15
               ),
             ),
-            backgroundColor: const Color(0xffd81159),
-          )
+          ),
+          backgroundColor: const Color(0xffd81159),
+        )
+      );
+    });
+    return null;
+  }
+
+  Future<String?> balanceTeams() async{
+    late String messageContent;
+
+    final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.balanceTeamsEndpoint; //"http://192.168.1.128:8080/basket/players/balanceTeams"
+
+    // at least 3 players to balance teams
+    if (teamA.length + teamB.length >=3) {
+      var distinctPlayers = [...{...(teamA+teamB)}];
+      var result = await http.post(
+        Uri.parse(url),
+        body: jsonEncode({
+          "players": distinctPlayers
+        }),
+        headers: {
+          'Authorization': 'Bearer ${jwtManager.jwt.toString()}'
+        },
+      );
+
+      if (result.statusCode == 200) {
+        // set teamA and teamB with result values
+        var data = json.decode(result.body);
+        var friends = data["balancedTeam1"];
+        var foes = data["balancedTeam2"];
+        //var swaps = data["swaps"];
+        var valueDiff = data["teamValueDifference"].toString().split(".")[0];
+        debugPrint(teamA.toString());
+        debugPrint(teamB.toString());
+        messageContent = "FDP7 balanced the teams:\n\nFriends: $friends\nFoes: $foes\n\nFriends & Foes have a difference of $valueDiff points";
+      }
+      else{
+        debugPrint("failed to balance teams");
+        messageContent = "failed to balance teams.\n\nTry later";
+      }
+    }
+    else {
+      debugPrint("FDP7 is busy balancing the entropy of the Universe. Meanwhile please check the players");
+      messageContent = "FDP7 is busy balancing the entropy of the Universe.\n\nMeanwhile, please check the players";
+    }
+
+    setState(() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Container(
+            padding: const EdgeInsets.all(16),
+            alignment: Alignment.bottomCenter,
+            height: 170,
+            child: Text(
+              messageContent,
+              style: const TextStyle(
+                  fontSize: 15
+              ),
+            ),
+          ),
+          backgroundColor: const Color(0xff006ba6),
+          duration: const Duration(seconds: 20),
+        )
       );
     });
     return null;
