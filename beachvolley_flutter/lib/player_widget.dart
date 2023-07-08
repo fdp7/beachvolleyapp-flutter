@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:beachvolley_flutter/league_components/lastMatches.dart';
+import 'package:beachvolley_flutter/models/Mate.dart';
+import 'package:beachvolley_flutter/player_components/mates.dart';
 import 'package:beachvolley_flutter/player_components/pieChart.dart';
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
@@ -28,6 +30,7 @@ class _PlayerPageState extends State<PlayerPage> {
   int matchCount = 100;
   int winCount = 50;
   List<double> elo = [100.0,100.0];
+  List<Mate> mates = [Mate("Title", "Name", 0, 0)];
 
   List<Match> matches = [];
   List<String> teamA = [];
@@ -88,6 +91,32 @@ class _PlayerPageState extends State<PlayerPage> {
         setState(() {
           winPie();
           eloTrend();
+        });
+      }
+    });
+  }
+
+  void loadPlayerMates(String player) async {
+    loadMatches();
+    Future.delayed(const Duration(milliseconds: 500)).then((_) async {
+      var getMatesEndpoint = ApiEndpoints.getPlayerEndpoint + player + ApiEndpoints.getPlayerMates;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + getMatesEndpoint;
+      var result = await http.get(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer ${jwtManager.jwt.toString()}',
+          }
+      );
+      var data = json.decode(result.body);
+      if (result.statusCode == 200) {
+        mates.clear();
+        mates = [
+          Mate("Best Friend", data["bestfriend"]["name"], data["bestfriend"]["won_loss_count"], data["bestfriend"]["total_matches_count"]),
+          Mate("Worst Foe", data["worstfoe"]["name"], data["worstfoe"]["won_loss_count"], data["worstfoe"]["total_matches_count"])
+        ];
+        //set new data to widget
+        setState(() {
+          matesCards();
         });
       }
     });
@@ -198,6 +227,9 @@ class _PlayerPageState extends State<PlayerPage> {
     child: EloChart(elo)
   );
 
+  Widget matesCards() => SliverToBoxAdapter(
+    child: Mates(mates),
+  );
   Widget matchesColumnChart() => SliverToBoxAdapter(
     child: MatchesColumnChart(currentUser, matches)
   );
@@ -279,6 +311,7 @@ class _PlayerPageState extends State<PlayerPage> {
         setState(() {
           currentUser = value!;
           loadPlayerData(currentUser);
+          loadPlayerMates(currentUser);
         })
       });
     });
@@ -298,10 +331,9 @@ class _PlayerPageState extends State<PlayerPage> {
           const SliverToBoxAdapter(child: SizedBox(height: 50)),
           picker(),
           winPie(),
-          //matchesColumnChart(),
           eloTrend(),
           lastMatches(),
-          //otherPlayers(),
+          matesCards(),
           const SliverToBoxAdapter(child: SizedBox(height: 100))
         ],
       ),
