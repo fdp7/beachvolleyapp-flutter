@@ -26,8 +26,8 @@ class _AddMatchState extends State<AddMatch> {
   bool isButtonDisabled = false;
 
   List<String> playerList = ["Please retry"];
-  List<String> teamA = [];
-  List<String> teamB = [];
+  Set<String> teamA = {};
+  Set<String> teamB = {};
   int scoreA = 0;
   int scoreB = 0;
 
@@ -78,8 +78,11 @@ class _AddMatchState extends State<AddMatch> {
                           unselectedColor: const Color(0xffebebea),
                           items: playerList.map((e) => MultiSelectItem(e, e)).toList(),
                           listType: MultiSelectListType.CHIP,
+                          initialValue: teamA.toList(),
                           onConfirm: (values) {
-                            teamA = values;
+                            setState((){
+                              teamA = values.toSet();
+                            });
                           },
                           confirmText: const Text("Ok", style: TextStyle(color: Color(0xffd81159)),),
                           cancelText: const Text("Cancel", style: TextStyle(color: Color(0xffd81159)),),
@@ -118,8 +121,11 @@ class _AddMatchState extends State<AddMatch> {
                           unselectedColor: const Color(0xffebebea),
                           items: playerList.map((e) => MultiSelectItem(e, e)).toList(),
                           listType: MultiSelectListType.CHIP,
+                          initialValue: teamB.toList(),
                           onConfirm: (values) {
-                            teamB = values;
+                            setState(() {
+                              teamB = values.toSet();
+                            });
                           },
                           confirmText: const Text("Ok", style: TextStyle(color: Color(0xffd81159)),),
                           cancelText: const Text("Cancel", style: TextStyle(color: Color(0xffd81159)),),
@@ -248,7 +254,7 @@ class _AddMatchState extends State<AddMatch> {
   Future<String?> saveMatch() async {
     // if no player is in both teams, save match, else print error
     late String messageContent;
-    int validTeams = validateTeams(teamA,teamB);
+    int validTeams = validateTeams(teamA.toList(),teamB.toList());
     bool validScores = validateScores(scoreA, scoreB);
     if (validTeams == 0 && validScores) {
       final url = ApiEndpoints.baseUrl + globals.selectedSport + ApiEndpoints.addMatchEndpoint;
@@ -336,7 +342,7 @@ class _AddMatchState extends State<AddMatch> {
 
     // at least 3 players to balance teams
     if (teamA.length + teamB.length >=3) {
-      var distinctPlayers = [...{...(teamA+teamB)}];
+      var distinctPlayers = [...{...(teamA.toList()+teamB.toList())}];
       var result = await http.post(
         Uri.parse(url),
         body: jsonEncode({
@@ -354,9 +360,12 @@ class _AddMatchState extends State<AddMatch> {
         var foes = data["balancedTeam2"];
         //var swaps = data["swaps"];
         var valueDiff = data["teamValueDifference"].toString().split(".")[0];
+        teamA = Set.from(friends);
+        teamB = Set.from(foes);
+
         debugPrint(teamA.toString());
         debugPrint(teamB.toString());
-        messageContent = "FDP7 balanced the teams:\n\nFriends: $friends\nFoes: $foes\n\nFriends & Foes have a difference of $valueDiff points";
+        messageContent = "FDP7 balanced the teams:\n\nFriends & Foes have a difference of $valueDiff points";
       }
       else{
         debugPrint("failed to balance teams");
@@ -374,7 +383,7 @@ class _AddMatchState extends State<AddMatch> {
           content: Container(
             padding: const EdgeInsets.all(16),
             alignment: Alignment.bottomCenter,
-            height: 170,
+            height: 120,
             child: Text(
               messageContent,
               style: const TextStyle(
