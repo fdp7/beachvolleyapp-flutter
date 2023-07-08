@@ -21,8 +21,6 @@ class _AddMatchState extends State<AddMatch> {
   static var jwtManager = JwtManager();
   var storage = const FlutterSecureStorage();
 
-  late Animation<double> animation;
-
   bool isButtonDisabled = false;
 
   List<String> playerList = ["Please retry"];
@@ -391,8 +389,7 @@ class _AddMatchState extends State<AddMatch> {
               ),
             ),
           ),
-          backgroundColor: const Color(0xff006ba6),
-          duration: const Duration(seconds: 20),
+          backgroundColor: const Color(0xff006ba6)
         )
       );
     });
