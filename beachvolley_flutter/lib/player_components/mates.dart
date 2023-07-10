@@ -7,35 +7,18 @@ import 'package:flutter/material.dart';
 class Mates extends StatelessWidget {
 
   final List<Mate> mates;
-  Mates(this.mates);
+  const Mates(this.mates, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  SizedBox(height: 10,),
-                  Text(
-                    "Mates",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(25),
           height: 310,
           child: Swiper(
             itemCount: mates.length,
-            itemBuilder: (BuildContext context, int index) => MateCard(mates[index], mates[index].title),
+            itemBuilder: (BuildContext context, int index)=>  MateCard(mates[index], mates[index].title, isWinCase: index == 0 ? true : false),
             itemWidth: 320.0,
             itemHeight: 320.0,
             layout: SwiperLayout.STACK,

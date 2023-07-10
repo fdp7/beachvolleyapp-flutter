@@ -25,7 +25,7 @@ class MyPieChart extends StatelessWidget {
         animationDuration: const Duration(seconds: 1),
         chartLegendSpacing: 50,
         chartRadius: MediaQuery.of(context).size.width / 3.2,
-        colorList: [Colors.greenAccent.withAlpha(250), Colors.redAccent],//const [Color(0xff0496ff), Color(0xffEFca08)],
+        colorList: [Colors.greenAccent.withAlpha(250), Colors.redAccent], //const [Color(0xff0496ff), Color(0xffEFca08)],
         initialAngleInDegree: 0,
         chartType: ChartType.ring,
         ringStrokeWidth: 60,
