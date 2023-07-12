@@ -48,6 +48,7 @@ dependencies:
   syncfusion_flutter_charts: ^20.4.49
   flutter_launcher_icons: ^0.12.0
   font_awesome_flutter: ^10.4.0
+  card_swiper: ^2.0.4
 
 dev_dependencies:
   flutter_test:

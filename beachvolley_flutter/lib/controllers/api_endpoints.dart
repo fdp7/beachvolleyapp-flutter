@@ -9,6 +9,7 @@ class ApiEndpoints{
 
   static String getPlayerEndpoint = "/player/";
   static String getRankingEndpoint = "/player/ranking";
+  static String getPlayerMates = "/mates";
 
   static String getMatchesEndpoint = "/matches";
 

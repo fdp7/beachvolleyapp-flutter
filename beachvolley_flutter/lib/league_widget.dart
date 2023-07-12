@@ -37,7 +37,7 @@ class _LeagueState extends State<League> {
   List<double> elo = [100.0];
 
   //final RefreshController _refreshController = RefreshController(initialRefresh: true);
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: true);
 
   @override
   Widget build(BuildContext context) {

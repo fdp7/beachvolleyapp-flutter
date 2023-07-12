@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
 import 'package:beachvolley_flutter/utils/JwtManager.dart';
 import 'package:flutter/material.dart';
@@ -211,7 +213,6 @@ class MatchCard extends StatelessWidget {
           fontSize = 20;
           fontWeight = FontWeight.w700;
         }
-
       }
       rows.add(Text(
         teamPlayers[i].toString(),

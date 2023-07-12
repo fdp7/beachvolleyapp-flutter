@@ -63,14 +63,6 @@ class SideBar extends StatelessWidget {
                 ),
                 textAlign: TextAlign.justify,
               )
-              /*const Text("Friends & Foes",
-                style: TextStyle(color: Colors.white, fontSize: 45),
-                textAlign: TextAlign.justify,
-              ),
-              const Text("                                                                                  FDP7",
-                style: TextStyle(color: Colors.white, fontSize: 12),
-                textAlign: TextAlign.end,
-              )*/
             ],
           ),
         )
@@ -90,24 +82,18 @@ class SideBar extends StatelessWidget {
 
   /// Summary: retrieve user name
   Widget headerWidget(){
-
     jwtManager.init();
     String? loggedUser = jwtManager.name;
     loggedUser ??= ''; //if null, then ''; instead of nullsafety error
 
     return Row(
       children: [
-        /*const CircleAvatar(
-          radius: 40,
-          backgroundColor: Colors.deepPurpleAccent,
-        ),*/
         const SizedBox(height: 50,),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children:[
-                //const Icon(Icons.verified_user, color: Colors.white, size: 20,),
                 Text(loggedUser, style: const TextStyle(fontSize: 20, color: Colors.white),)
               ]
             )

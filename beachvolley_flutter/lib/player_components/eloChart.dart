@@ -32,7 +32,7 @@ class EloChart extends StatelessWidget {
         series: <ChartSeries>[
           LineSeries<EloData, double>(
             name: "elo trend",
-            width: 6,
+            width: 5,
             dataSource: getEloData(elo),
             xValueMapper: (EloData eloData, _) => eloData.x,
             yValueMapper: (EloData eloData, _) => eloData.elo_i,

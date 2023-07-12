@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:beachvolley_flutter/league_components/lastMatches.dart';
+import 'package:beachvolley_flutter/models/Mate.dart';
+import 'package:beachvolley_flutter/player_components/mates.dart';
 import 'package:beachvolley_flutter/player_components/pieChart.dart';
 import 'package:beachvolley_flutter/controllers/api_endpoints.dart';
 import 'package:beachvolley_flutter/login_widget.dart';
@@ -28,6 +31,7 @@ class _PlayerPageState extends State<PlayerPage> {
   int matchCount = 100;
   int winCount = 50;
   List<double> elo = [100.0,100.0];
+  List<Mate> mates = [Mate("Title", "Name", 0, 0)];
 
   List<Match> matches = [];
   List<String> teamA = [];
@@ -35,12 +39,16 @@ class _PlayerPageState extends State<PlayerPage> {
   String date = "";
 
   void _onRefresh() async{
+    loadPlayersList();
     loadPlayerData(currentUser);
+    loadPlayerMates(currentUser);
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async{
+    loadPlayersList();
     loadPlayerData(currentUser);
+    loadPlayerMates(currentUser);
     _refreshController.loadComplete();
   }
 
@@ -93,6 +101,32 @@ class _PlayerPageState extends State<PlayerPage> {
     });
   }
 
+  void loadPlayerMates(String player) async {
+    loadMatches();
+    Future.delayed(const Duration(milliseconds: 500)).then((_) async {
+      var getMatesEndpoint = ApiEndpoints.getPlayerEndpoint + player + ApiEndpoints.getPlayerMates;
+      final url = ApiEndpoints.baseUrl + globals.selectedSport + getMatesEndpoint;
+      var result = await http.get(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer ${jwtManager.jwt.toString()}',
+          }
+      );
+      var data = json.decode(result.body);
+      if (result.statusCode == 200) {
+        mates.clear();
+        mates = [
+          Mate("Best Friend", data["bestfriend"]["name"], data["bestfriend"]["won_loss_count"], data["bestfriend"]["total_matches_count"]),
+          Mate("Worst Foe", data["worstfoe"]["name"], data["worstfoe"]["won_loss_count"], data["worstfoe"]["total_matches_count"])
+        ];
+        //set new data to widget
+        setState(() {
+          matesCards();
+        });
+      }
+    });
+  }
+
   Widget picker(){
     if (playerList.isEmpty){
       loadPlayersList();
@@ -106,7 +140,7 @@ class _PlayerPageState extends State<PlayerPage> {
             backgroundBlendMode: BlendMode.colorBurn
           ),
           child: ListTile(
-              leading: const Icon(Icons.sports_handball_outlined, size: 50, color: Color(0xffd81159)), //pink:0xffd81159, blue:0xff0496ff
+              leading: const Icon(Icons.sports_handball_outlined, size: 50, color: Color(0xffd81159)),
               title: Text(currentUser, style: const TextStyle(fontSize: 20, color: Color(0xffd81159), fontWeight: FontWeight.w700)),
               subtitle: const Text("click to change player", style: TextStyle(color: Color(0xffd81159))),
               trailing: const Icon(Icons.arrow_drop_down_circle_outlined, color: Color(0xffd81159)),
@@ -154,6 +188,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                       setState(() {
                                         currentUser = playerList[index];
                                         loadPlayerData(currentUser);
+                                        loadPlayerMates(currentUser);
                                         Navigator.pop(context);
                                       });
                                     }
@@ -198,8 +233,8 @@ class _PlayerPageState extends State<PlayerPage> {
     child: EloChart(elo)
   );
 
-  Widget matchesColumnChart() => SliverToBoxAdapter(
-    child: MatchesColumnChart(currentUser, matches)
+  Widget matesCards() => SliverToBoxAdapter(
+    child: Mates(mates),
   );
 
   Widget lastMatches() => SliverToBoxAdapter(
@@ -279,6 +314,7 @@ class _PlayerPageState extends State<PlayerPage> {
         setState(() {
           currentUser = value!;
           loadPlayerData(currentUser);
+          loadPlayerMates(currentUser);
         })
       });
     });
@@ -298,10 +334,9 @@ class _PlayerPageState extends State<PlayerPage> {
           const SliverToBoxAdapter(child: SizedBox(height: 50)),
           picker(),
           winPie(),
-          //matchesColumnChart(),
           eloTrend(),
+          matesCards(),
           lastMatches(),
-          //otherPlayers(),
           const SliverToBoxAdapter(child: SizedBox(height: 100))
         ],
       ),
