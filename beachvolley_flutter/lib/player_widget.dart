@@ -66,7 +66,7 @@ class _PlayerPageState extends State<PlayerPage> {
         playerList.clear();
         for (var i = 0; i < data["ranking"].length; i++) {
           setState(() {
-            playerList.add((data["ranking"][i]["name"]).toString().toLowerCase());
+            playerList.add(data["ranking"][i]["name"]);
           });
         }
         playerList.sort();
