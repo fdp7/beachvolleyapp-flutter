@@ -261,8 +261,8 @@ class _AddMatchState extends State<AddMatch> {
       var result = await http.post(
         Uri.parse(url),
         body: jsonEncode({
-          "team_a": teamA,
-          "team_b": teamB,
+          "team_a": teamA.toList(),
+          "team_b": teamB.toList(),
           "score_a": scoreA,
           "score_b": scoreB,
           "date": currentDate
