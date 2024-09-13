@@ -35,14 +35,14 @@ class SideBar extends StatelessWidget {
                   onPressed: ()=> onSportSelected(context, globals.beachvolleyEndpoint)
               ),
               SideBarItem(
-                  name: globals.poolEndpoint,
+                  name: globals.padelEndpoint,
                   icon: Icons.sports_tennis_rounded,
-                  onPressed: ()=> onSportSelected(context, globals.poolEndpoint)
+                  onPressed: ()=> onSportSelected(context, globals.padelEndpoint)
               ),
               SideBarItem(
-                  name: globals.padelEndpoint,
+                  name: globals.poolEndpoint,
                   icon: const IconData(0xe9b5, fontFamily: "RPGAwesome"),
-                  onPressed: ()=> onSportSelected(context, globals.padelEndpoint)
+                  onPressed: ()=> onSportSelected(context, globals.poolEndpoint)
               ),
               const SizedBox(height: 30,),
               const Divider(thickness: 1, height: 10, color: Colors.white,),
