@@ -40,6 +40,11 @@ class SideBar extends StatelessWidget {
                   onPressed: ()=> onSportSelected(context, globals.padelEndpoint)
               ),
               SideBarItem(
+                  name: globals.chessEndpoint,
+                  icon: const IconData(0xea57, fontFamily: "RPGAwesome"),
+                  onPressed: ()=> onSportSelected(context, globals.chessEndpoint)
+              ),
+              SideBarItem(
                   name: globals.poolEndpoint,
                   icon: const IconData(0xe9b5, fontFamily: "RPGAwesome"),
                   onPressed: ()=> onSportSelected(context, globals.poolEndpoint)

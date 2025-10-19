@@ -4,6 +4,7 @@ String basketEndpoint = 'basket';
 String beachvolleyEndpoint = 'beachvolley';
 String poolEndpoint = "pool";
 String padelEndpoint = "padel";
+String chessEndpoint = "chess";
 String selectedSport = basketEndpoint; //default is basket
 
 String leagueTitle = 'League';
